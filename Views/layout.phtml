@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<?php
+			foreach ($scripts as $script) {
+				echo "<script src=\"" . $script . "\" />";
+			}
+		?>
+		<?php
+			foreach ($styles as $style) {
+				echo "<link rel=\"stylesheet\" href=\"" . $style . "\" />";
+			}
+		?>
+		<title><?= $title ?></title>
+
+		<style>
+			/**/
+		</style>
+	</head>
+	<body>
+		<?php
+			foreach ($views as $viewName => $path) {
+				foreach ($vars[$viewName] as $varName => $value) {
+					$$varName = $value;
+				}
+				include_once $path;
+			}
+		?>
+	</body>
+</html>
