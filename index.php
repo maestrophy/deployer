@@ -68,7 +68,7 @@ try {
 	 */
 	$handlerInstance = new $handler();
 
-	$handlerInstance->handle(...$vars);
+	$handlerInstance->$action(...$vars);
 } catch (Throwable $e) {
 	echo $e->getMessage();
 }
