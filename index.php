@@ -1,7 +1,5 @@
 <?php
 
-echo "Siker!";
-/*
 set_include_path(__DIR__);
 $url = $_SERVER['REQUEST_URI'];
 $scheme = $_SERVER['REQUEST_SCHEME'] . '://';
@@ -64,10 +62,10 @@ foreach ($endpoints as $endpoint => $options) {
 include_once 'Handlers/AbstractHandler.php';
 include_once 'Views/ViewBuilder.php';
 include_once 'Handlers/' . $handler;
-*/
+
 /**
  * @var AbstractHandler
  */
-/*$handlerInstance = new $handler();
+$handlerInstance = new $handler();
 
-$handlerInstance->handle(...$vars);*/
+$handlerInstance->handle(...$vars);
