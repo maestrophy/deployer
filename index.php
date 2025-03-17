@@ -61,7 +61,7 @@ try {
 
 	include_once 'Handlers/AbstractHandler.php';
 	include_once 'Views/ViewBuilder.php';
-	include_once 'Handlers/' . $handler;
+	include_once 'Handlers/' . $handler . '.php';
 
 	/**
 	 * @var AbstractHandler
