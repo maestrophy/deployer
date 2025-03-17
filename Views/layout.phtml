@@ -19,7 +19,7 @@
 	</head>
 	<body>
 		<?php
-			foreach ($views as $viewName => $path) {
+			foreach ($viewsToRender as $viewName => $path) {
 				foreach ($vars[$viewName] as $varName => $value) {
 					$$varName = $value;
 				}
