@@ -24,7 +24,7 @@
 				foreach ($vars[$viewName] as $varName => $value) {
 					$$varName = $value;
 				}
-				include_once $path;
+				include $path;
 			}
 		?>
 	</body>

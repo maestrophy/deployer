@@ -8,10 +8,13 @@ class ViewBuilder {
 	private array $scripts = [];
 	private string $title = 'Deployer';
 
-	public function pickView(string $viewName)
+	public function pickView(string $viewName, string $extraPath = '')
 	{
-		if (file_exists('./' . $viewName . '.phtml')) {
-			$this->views[$viewName] = './' . $viewName . '.phtml';
+		if (!empty($extraPath)) {
+			PathUtil::getCleanPathWithTrailingSlash($extraPath);
+		}
+		if (file_exists('Views/' . $extraPath . $viewName . '.phtml')) {
+			$this->views[$viewName] = 'Views/' . $extraPath . $viewName . '.phtml';
 			$this->viewVars[$viewName] = [];
 		}
 	}
@@ -31,16 +34,19 @@ class ViewBuilder {
 		}
 	}
 
-	public function pickComponent(string $viewName)
+	public function pickComponent(string $viewName, string $extraPath = '')
 	{
-		if (file_exists('./' . $viewName . '.phtml')) {
-			$this->views[$viewName] = './' . $viewName . '.phtml';
+		if (!empty($extraPath)) {
+			PathUtil::getCleanPathWithTrailingSlash($extraPath);
 		}
-		if (file_exists('./Styles/' . $viewName . '.css')) {
-			$this->styles[$viewName] = './Styles/' . $viewName . '.phtml';
+		if (file_exists('Views/' . $extraPath . $viewName . '.phtml')) {
+			$this->views[$viewName] = 'Views/' . $extraPath . $viewName . '.phtml';
 		}
-		if (file_exists('./Scripts/' . $viewName . '.js')) {
-			$this->scripts[$viewName] = './Scripts/' . $viewName . '.js';
+		if (file_exists('Views/Styles/' . $extraPath . $viewName . '.css')) {
+			$this->styles[$viewName] = 'Views/Styles/' . $extraPath . $viewName . '.phtml';
+		}
+		if (file_exists('Views/Scripts/' . $extraPath . $viewName . '.js')) {
+			$this->scripts[$viewName] = 'Views/Scripts/' . $extraPath . $viewName . '.js';
 		}
 	}
 
@@ -56,7 +62,7 @@ class ViewBuilder {
 		$scripts = $this->scripts;
 		$title = $this->title;
 		$vars = $this->getViewVarsForRender();
-		include_once './layout.phtml';
+		include 'layout.phtml';
 	}
 
 	private function getViewVarsForRender(): array
