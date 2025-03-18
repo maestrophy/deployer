@@ -24,9 +24,10 @@ class ProjectService {
 
 	public function createNewProject(array $projectData)
 	{
-		if (!self::validateProjectData($projectData)) {
-			//
-		}
+		try {
+			self::validateProjectData($projectData);
+			$this->saveNewProject($projectData);
+		} catch (Throwable $e) {}
 	}
 
 	public function getRawAllProjects(): string {
@@ -49,13 +50,34 @@ class ProjectService {
 		}
 	}
 
+	private function saveNewProject(array $projectData): void
+	{
+		$projects = $this->getAllProjects();
+		$duplicates = array_filter(
+			$projects,
+			fn ($project) => $project['projectPath'] === $projectData['projectPath']
+		);
+		if (count($duplicates) > 0) {
+			throw new Exception('Project is existing for that path: ' . array_values($duplicates)[0]['projectPath']);
+		}
+		$duplicates = array_filter(
+			$projects,
+			fn ($project) => $project['projectName'] === $projectData['projectName']
+		);
+		if (count($duplicates) > 0) {
+			throw new Exception('A project is already existing with this name!');
+		}
+		array_push($projects, $projectData);
+		file_put_contents($this->getProjectsStoragePath(), json_encode($projects));
+	}
+
 	public static function validateProjectData(array &$projectData): bool
 	{
 		if (empty($projectData['projectPath'])) {
-			return false;
+			throw new Exception('Project path is not defined!');
 		}
-		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
 		PathUtil::getCleanFullPathWithTrailingSlash($projectData['projectPath']);
+		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
 		if (empty($projectData['projectName']) || !preg_match('/^[a-zA-Z][a-zA-Z0-9\-_\.]+$/', $projectData['projectName'])) {
 			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters');
 		}
