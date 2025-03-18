@@ -1,4 +1,4 @@
-/config.php
-/*docker*
-/nginx.conf
-/Storage/*
+config.php
+*docker*
+nginx.conf
+Storage/*
