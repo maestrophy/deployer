@@ -10,6 +10,6 @@ class NotFoundHandler {
 	 * @return void
 	 */
 	function index() {
-		//
+		echo 'Not found!';
 	}
 }

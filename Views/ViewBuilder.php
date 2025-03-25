@@ -1,5 +1,6 @@
 <?php
 
+include_once 'Utils/PathUtil.php';
 class ViewBuilder {
 
 	private array $views = [];
@@ -7,6 +8,41 @@ class ViewBuilder {
 	private array $styles = [];
 	private array $scripts = [];
 	private string $title = 'Deployer';
+	private string $layout;
+	private array $layoutVars;
+
+	function __construct(string $layout = 'Views/layout.phtml')
+	{
+		if (empty($layout) || (file_exists($layout) && $layout !== 'Views/layout.phtml')) {
+			$this->layout = $layout;
+			$this->layoutVars = [];
+			echo "Ide futunk be";
+		} else {
+			$projectService = new ProjectService();
+			$this->layout = 'Views/layout.phtml';
+			$this->layoutVars = ['projects' => ($projectService->getAllProjects())];
+		}
+	}
+	public function setLayout(string $layout)
+	{
+		if (empty($layout) || file_exists($layout)) {
+			$this->layout = $layout;
+			$this->layoutVars = [];
+		}
+	}
+
+	public function setLayoutVar(int|string|null $varName, $value, $override = false): bool
+	{
+		if ($varName === null) {
+			array_push($this->layoutVars, $value);
+		} else if (!isset($this->layoutVars[$varName]) || $override) {
+			$this->layoutVars[$varName] = $value;
+		} else {
+			trigger_error($varName . ' variable already existing in layout variables!', E_USER_WARNING);
+			return false;
+		}
+		return true;
+	}
 
 	public function pickView(string $viewName, string $extraPath = '')
 	{
@@ -43,7 +79,7 @@ class ViewBuilder {
 			$this->views[$viewName] = 'Views/' . $extraPath . $viewName . '.phtml';
 		}
 		if (file_exists('Views/Styles/' . $extraPath . $viewName . '.css')) {
-			$this->styles[$viewName] = 'Views/Styles/' . $extraPath . $viewName . '.phtml';
+			$this->styles[$viewName] = 'Views/Styles/' . $extraPath . $viewName . '.css';
 		}
 		if (file_exists('Views/Scripts/' . $extraPath . $viewName . '.js')) {
 			$this->scripts[$viewName] = 'Views/Scripts/' . $extraPath . $viewName . '.js';
@@ -62,7 +98,19 @@ class ViewBuilder {
 		$scripts = $this->scripts;
 		$title = $this->title;
 		$vars = $this->getViewVarsForRender();
-		include 'layout.phtml';
+		if (!empty($this->layout)) {
+			foreach ($this->layoutVars as $varName => $value) {
+				$$varName = $value;
+			}
+			include $this->layout;
+		} else {
+			foreach ($viewsToRender as $view) {
+				foreach ($vars[$view] as $varName => $value) {
+					$$varName = $value;
+				}
+				include $view;
+			}
+		}
 	}
 
 	private function getViewVarsForRender(): array

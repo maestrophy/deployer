@@ -1,0 +1,36 @@
+<div class="centered">
+	<form id="projectCreateForm">
+		<section class="formSection">
+			<div class="inputHolder">
+				<label for="projectName">
+					<div class="labelSpan">Project name</div>
+				</label>
+				<input
+					type="text"
+					pattern="[a-zA-Z][a-zA-Z0-9\-_\.\s]+"
+					id="projectName"
+					name="projectName"
+					placeholder="Name of the project"
+				/>
+				<p class="errorMessage">Error placeholder</p>
+			</div>
+			<div class="inputHolder">
+				<label for="projectPath">
+					<div class="labelSpan">Project path</div>
+				</label>
+				<input
+					type="text"
+					pattern="/((([a-zA-Z\-_0-9\.]+)/)+)?[a-zA-Z\-_0-9\.]+/?"
+					id="projectPath"
+					name="projectPath"
+					placeholder="Path of the project"
+				/>
+				<p class="errorMessage">Error placeholder</p>
+				<p class="infoMessage"></p>
+			</div>
+			<div>
+				<button id="addProjectButton" disabled>Add project</button>
+			</div>
+		</section>
+	</form>
+</div>

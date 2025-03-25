@@ -22,10 +22,11 @@ try {
 			) + 1
 		);
 	}
-
+	$target = explode('?', $target)[0];
 	$endpoints = include_once 'routes.php';
-	$handler = 'NotFound';
-	foreach ($endpoints as $endpoint => $options) {
+	$handler = 'NotFoundHandler';
+	foreach ($endpoints as $options) {
+		$endpoint = $options['uri'];
 		$patterns = empty($options['patterns']) ? [] : $options['patterns'];
 		preg_match_all('/\{([a-zA-Z0-9\-\_]+)\}/', $endpoint, $wildCards);
 		$vars = [];
@@ -53,22 +54,40 @@ try {
 			for ($x = 1; $x < count($matches); $x++) {
 				$vars[$varNames[$x - 1]] = $matches[$x];
 			}
-			$handler = $options['handler'] . 'Handler';
 			$action = empty($options['action']) ? 'index' : $options['action'];
+			$handler = $options['handler'] . 'Handler';
 			break;
 		}
 	}
-
-	include_once 'Handlers/AbstractHandler.php';
+	empty($action) && $action = 'index';
 	include_once 'Views/ViewBuilder.php';
+	include_once 'Services/ProjectService.php';
+	include_once 'Models/Project.php';
 	include_once 'Handlers/' . $handler . '.php';
+	$_POST = json_decode(file_get_contents('php://input'), true);
 
 	/**
 	 * @var AbstractHandler
 	 */
 	$handlerInstance = new $handler();
 
-	$handlerInstance->$action(...$vars);
+	$response = $handlerInstance->$action(...$vars);
+	if (!empty($response)) {
+		$finalResponse = json_encode($response);
+		if (!headers_sent()) {
+			header('Content-Type: application/json');
+			header('Content-Length: ' . strlen($finalResponse));
+		} else {
+			usleep(100000);
+		}
+		echo $finalResponse;
+		fastcgi_finish_request();
+	}
 } catch (Throwable $e) {
 	echo $e->getMessage();
+	$trace = $e->getTrace();
+	foreach ($trace as $unit) {
+		echo '<br>';
+		echo $unit['file'] . ': ' . $unit['line'];
+	}
 }

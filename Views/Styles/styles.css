@@ -1,0 +1,85 @@
+div.centered {
+	transform: translate(-50%, -50%);
+	position: relative;
+	top: 50%;
+	left: 50%;
+}
+section.formSection {
+	text-align: center;
+	vertical-align: super;
+}
+div.inputHolder {
+	width: min-content;
+	margin: 20px;
+	font-size: 14pt;
+	display: inline-block;
+	text-align: left;
+}
+div.inputHolder input[type=number],
+div.inputHolder input[type=text] {
+	margin-top: none;
+	padding: 5px;
+	width: 300px;
+	height: 40px;
+	font-size: 14pt;
+}
+div.inputHolder input[type=number].error,
+div.inputHolder input[type=text].error {
+	box-shadow: 0 0 5px red;
+	border: 2px solid red;
+}
+div.inputHolder input,
+div.inputHolder label {
+	display: block;
+}
+div.inputHolder input {
+	border-radius: 0 8px 8px 8px;
+}
+div.inputHolder label {
+	padding: 5px;
+	margin-bottom: 5px;
+}
+div.inputHolder label div.labelSpan {
+	display: inline-block;
+	padding-top: 5px;
+	max-width: 80%;
+	border-top: 2px inset rgb(118, 118, 118);
+}
+div.inputHolder p.errorMessage {
+	visibility: hidden;
+	color: rgb(220, 20, 60);
+	margin: 5px;
+}
+div.inputHolder p.infoMessage {
+	display: none;
+	font-style: italic;
+	color: rgb(100, 100, 100);
+	margin: 5px;
+}
+button {
+	position: relative;
+	margin: 20px;
+	padding: 10px;
+	font-size: 14pt;
+	border-radius: 8px;
+	color: black;
+	background: radial-gradient(circle, rgba(240,255,245,0.3) 0%, rgba(0,0,0,0) 70%), 
+                linear-gradient(to bottom, #E0EEE8, #D0DED8);
+	cursor: pointer;
+	box-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3), 
+				inset 2px 2px 3px rgba(255,255,255,0.5);
+	transition: all 0.2s ease-in-out;
+}
+button:not([disabled]):active {
+	left: 2px;
+	top: 2px;
+	background: linear-gradient(to bottom, #BCBCBC, #ABABAB);
+	box-shadow: inset 3px 3px 6px rgba(0,0,0,0.5), 
+                inset -2px -2px 3px rgba(255,255,255,0.3);
+}
+button:disabled {
+	color: rgb(100, 100, 100);
+	background: linear-gradient(to bottom, #DED0D0, #EEE0E0);
+	box-shadow: none;
+	cursor: not-allowed;
+}

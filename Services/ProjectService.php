@@ -9,7 +9,7 @@ class ProjectService {
 
 	public function getProject(string $name): Project | null
 	{
-		$projectsData = $this->getAllProjects();
+		$projectsData = $this->getAllProjectsAsArray();
 		$result = array_filter($projectsData, fn ($item) => !empty($item['projectName']) && $item['projectName'] === $name);
 		if (count($result) > 0) {
 			return new Project($result);
@@ -24,10 +24,8 @@ class ProjectService {
 
 	public function createNewProject(array $projectData)
 	{
-		try {
-			self::validateProjectData($projectData);
-			$this->saveNewProject($projectData);
-		} catch (Throwable $e) {}
+		self::validateProjectData($projectData);
+		$this->saveNewProject($projectData);
 	}
 
 	public function getRawAllProjects(): string {
@@ -39,20 +37,21 @@ class ProjectService {
 		return $rawProjectsData;
 	}
 
-	public function getAllProjects(): array {
+	public function getAllProjectsAsArray(): array
+	{
 		$rawProjectsData = $this->getRawAllProjects();
 		$projectsData = json_decode($rawProjectsData);
-		if (json_last_error() !== JSON_ERROR_NONE) {
+		if (json_last_error() == JSON_ERROR_NONE) {
 			return $projectsData;
 		} else {
-			trigger_error($this->$this->getProjectsStoragePath() . ' file is not valid json!', E_USER_WARNING);
+			trigger_error($this->getProjectsStoragePath() . ' file is not valid json!', E_USER_WARNING);
 			return [];
 		}
 	}
 
 	private function saveNewProject(array $projectData): void
 	{
-		$projects = $this->getAllProjects();
+		$projects = $this->getAllProjectsAsArray();
 		$duplicates = array_filter(
 			$projects,
 			fn ($project) => $project['projectPath'] === $projectData['projectPath']
@@ -71,21 +70,31 @@ class ProjectService {
 		file_put_contents($this->getProjectsStoragePath(), json_encode($projects));
 	}
 
+	/**
+	 * Undocumented function
+	 *
+	 * @return Project[]
+	 */
+	public function getAllProjects(): array
+	{
+		return array_map(fn ($projectData) => new Project($projectData), $this->getAllProjectsAsArray());
+	}
+
 	public static function validateProjectData(array &$projectData): bool
 	{
 		if (empty($projectData['projectPath'])) {
-			throw new Exception('Project path is not defined!');
+			throw new Exception('Project path is not defined!', 100002);
 		}
 		PathUtil::getCleanFullPathWithTrailingSlash($projectData['projectPath']);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
 		if (empty($projectData['projectName']) || !preg_match('/^[a-zA-Z][a-zA-Z0-9\-_\.]+$/', $projectData['projectName'])) {
-			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters');
+			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
 		if (!is_dir($projectData['projectPath'])) {
-			throw new Exception('The given path is not valid, it does not exist on the server!');
+			throw new Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
 		if (!is_dir($projectData['projectPath'] . '.git') || $isGitRepo === 0) {
-			throw new Exception('The given path is not a valid git repository!');
+			throw new Exception('The given path is not a valid git repository!', 100002);
 		}
 		if (!isset($projectData['scripts'])) {
 			$projectData['scripts'] = [];
@@ -95,5 +104,21 @@ class ProjectService {
 			throw new Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
 		}
 		return true;
+	}
+
+	public static function validateGitRepository(string $path): bool
+	{
+		if (empty($path)) {
+			return false;
+		}
+		PathUtil::getCleanFullPathWithTrailingSlash($path);
+		if (!is_dir($path)) {
+			return false;
+		}
+		if (!is_dir($path . '.git')) {
+			return false;
+		}
+		exec("git -C " . escapeshellarg($path) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $exitCode);
+		return ($exitCode === 0);
 	}
 }

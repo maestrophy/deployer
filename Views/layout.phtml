@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
+		<script src="Views/Scripts/app.js"></script>
+		<script src="Views/Scripts/angularFeatures.js"></script>
 		<?php
 			foreach ($scripts as $script) {
-				echo "<script src=\"" . $script . "\" />";
+				echo "<script src=\"" . $script . "\"></script>";
 			}
 		?>
+		<link rel="stylesheet" href="Views/Styles/styles.css" />
 		<?php
 			foreach ($styles as $style) {
 				echo "<link rel=\"stylesheet\" href=\"" . $style . "\" />";
@@ -14,18 +17,135 @@
 		<title><?= $title ?></title>
 
 		<style>
-			/**/
+			body {
+				background-color: rgba(245, 245, 220, 0.95);
+			}
+			div.main {
+				width: 100vw;
+				height: 100vh;
+				display: flex;
+				flex-wrap: nowrap;
+			}
+			.sidePanel,
+			.mainPanel {
+				height: 90%;
+				border-radius: 10px;
+				padding: 12px;
+				border: 2px inset;
+				background-color: rgba(230, 230, 230, 0.95);
+				display: inline-block;
+				margin: 10px;
+			}
+			.sidePanel {
+				width: 20vw;
+				margin-right: 20px;
+				display: flex;
+				flex-direction: column;
+			}
+			.mainPanel {
+				width: calc(80vw - 132px);
+				border-radius: 10px;
+			}
+			.sidePanel h1 {
+				text-align: center;
+				align-items: center;
+				color: rgb(80, 80, 80);
+			}
+			.sidePanel div.constrictor {
+				margin: 0px 10px;
+			}
+			.sidePanel a.anchor-button {
+				text-decoration: none;
+				color: inherit;
+				text-align: center;
+				border: 1px outset;
+				background-color: rgb(240, 240, 240);
+				padding: 15px 25px;
+				margin: 10px 0;
+				border-radius: 10px;
+				display: inline-block;
+				font-size: 14pt;
+				position: relative;
+			}
+			.sidePanel a.anchor-button:active {
+				border: 1px inset;
+				background-color: rgb(225, 225, 225);
+				box-shadow: 3px #AAA;
+				top: 2px;
+				left: 2px;
+			}
+			/*.sidePanel a.anchor-button span.cross {
+				border-radius: 25px;
+				display: inline-block;
+				background-color: rgb(210, 245, 220);
+				padding: 5px;
+				height: 25px;
+				width: 25px;
+				border: 1px solid rgb(200, 200, 200);
+			}*/
+			.sidePanel a.anchor-button .plus-circle {
+				width: 20px;
+				height: 20px;
+				background-color: rgb(210, 245, 220);; /* Circle background */
+				border: 1px solid rgb(200, 200, 200); /* Circle border */
+				border-radius: 50%; /* Makes it a circle */
+				position: relative;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				display: inline-flex;
+				position: relative;
+				top: 5px;
+				margin-right: 10px;
+			}
+			.sidePanel a.anchor-button .plus-circle::before,
+			.sidePanel a.anchor-button .plus-circle::after {
+				content: "";
+				position: absolute;
+				background-color: black;
+			}
+
+			/* Vertical bar */
+			.sidePanel a.anchor-button .plus-circle::before {
+				width: 2px;
+				height: 60%;
+			}
+			.sidePanel a.anchor-button .plus-circle::after {
+				height: 2px;
+				width: 60%;
+			}
 		</style>
 	</head>
 	<body>
-		<?php
-		var_dump($viewsToRender);
-			foreach ($viewsToRender as $viewName => $path) {
-				foreach ($vars[$viewName] as $varName => $value) {
-					$$varName = $value;
-				}
-				include $path;
-			}
-		?>
+		<div class="main">
+			<div class="sidePanel">
+				<h1>Projects</h1>
+				<div class="constrictor">
+					<hr />
+				</div>
+				<a class="anchor-button" href="/new-project">
+					<div class="plus-circle"></div>New project
+				</a>
+				<?php
+					foreach ($projects as $project) {
+						?>
+						<a class="anchor-button" href="/new-project">
+							<?php echo $project->getProjectName(); ?>
+						</a>
+						<?php
+					}
+				?>
+			</div>
+			<div class="mainPanel">
+				<?php
+					foreach ($viewsToRender as $viewName => $path) {
+						foreach ($vars[$viewName] as $varName => $value) {
+							$$varName = $value;
+						}
+						include $path;
+					}
+				?>
+			</div>
+		</div>
 	</body>
 </html>

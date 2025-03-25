@@ -40,4 +40,9 @@ class Project {
 	{
 		CommandService::runCommandAsUserInFolder('git pull', $this->path);
 	}
+
+	public function getProjectName(): string
+	{
+		return $this->name;
+	}
 }

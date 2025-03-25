@@ -6,7 +6,7 @@ class MainHandler {
 	{
 		$viewBuilder = new ViewBuilder();
 		$viewBuilder->pickComponent('main');
-		$viewBuilder->setTitle('Főoldal');
+		$viewBuilder->setTitle('Home');
 		$viewBuilder->render();
 	}
 }
