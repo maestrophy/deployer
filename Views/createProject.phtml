@@ -7,7 +7,7 @@
 				</label>
 				<input
 					type="text"
-					pattern="[a-zA-Z][a-zA-Z0-9\-_\.\s]+"
+					pattern="<?= $projectNameRegex ?>"
 					id="projectName"
 					name="projectName"
 					placeholder="Name of the project"
@@ -20,7 +20,7 @@
 				</label>
 				<input
 					type="text"
-					pattern="/((([a-zA-Z\-_0-9\.]+)/)+)?[a-zA-Z\-_0-9\.]+/?"
+					pattern="<?= $projectPathRegex ?>"
 					id="projectPath"
 					name="projectPath"
 					placeholder="Path of the project"

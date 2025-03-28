@@ -70,6 +70,16 @@ class ViewBuilder {
 		}
 	}
 
+	public function setViewVar(string $viewName, string $varName, $value)
+	{
+		if (preg_match('/^[a-zA-Z_][a-zA-Z_0-9]+$/', $varName)) {
+			if (!isset($this->viewVars[$viewName])) {
+				$this->viewVars[$viewName] = [];
+			}
+			$this->viewVars[$viewName][$varName] = $value;
+		}
+	}
+
 	public function pickComponent(string $viewName, string $extraPath = '')
 	{
 		if (!empty($extraPath)) {

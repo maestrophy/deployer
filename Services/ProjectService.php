@@ -6,6 +6,8 @@ class ProjectService {
 
 	private $storagePath = "Storage";
 	private $projectStorageFileName = "projects.json";
+	private static $projectNameRegex = '[a-zA-Z][a-zA-Z0-9\.\-_\s\/]{2,}';
+	private static $projectPathRegex = '\/[a-zA-Z\-_\s\.]+((\/[a-zA-Z\-_\s\.]+)+)?\/?';
 
 	public function getProject(string $name): Project | null
 	{
@@ -40,7 +42,7 @@ class ProjectService {
 	public function getAllProjectsAsArray(): array
 	{
 		$rawProjectsData = $this->getRawAllProjects();
-		$projectsData = json_decode($rawProjectsData);
+		$projectsData = json_decode($rawProjectsData, true);
 		if (json_last_error() == JSON_ERROR_NONE) {
 			return $projectsData;
 		} else {
@@ -85,11 +87,16 @@ class ProjectService {
 		if (empty($projectData['projectPath'])) {
 			throw new Exception('Project path is not defined!', 100002);
 		}
+
 		PathUtil::getCleanFullPathWithTrailingSlash($projectData['projectPath']);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
-		if (empty($projectData['projectName']) || !preg_match('/^[a-zA-Z][a-zA-Z0-9\-_\.]+$/', $projectData['projectName'])) {
+
+		if (
+			empty($projectData['projectName']) ||
+			!preg_match(static::getProjectNameRegex(), $projectData['projectName'])) {
 			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
+
 		if (!is_dir($projectData['projectPath'])) {
 			throw new Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
@@ -118,7 +125,31 @@ class ProjectService {
 		if (!is_dir($path . '.git')) {
 			return false;
 		}
-		exec("git -C " . escapeshellarg($path) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $exitCode);
+		try {
+			CommandService::runCommandAsUser("git -C " . escapeshellarg($path) . " rev-parse --is-inside-work-tree 2>/dev/null");
+			$exitCode = 0;
+		} catch(Exception $e) {
+			$exitCode = 1;
+			exit($e->getMessage());
+		}
 		return ($exitCode === 0);
+	}
+
+	public static function getProjectNameRegex(bool $htmlMode = false): string
+	{
+		if ($htmlMode) {
+			return str_replace('\\.', '.', static::$projectNameRegex);
+		} else {
+			return '/^' . static::$projectNameRegex . '$/';
+		}
+	}
+
+	public static function getProjectPathRegex(bool $htmlMode = false): string
+	{
+		if ($htmlMode) {
+			return str_replace('\\.', '.', static::$projectPathRegex);
+		} else {
+			return '/^' . static::$projectPathRegex . '$/';
+		}
 	}
 }

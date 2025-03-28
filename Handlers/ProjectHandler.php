@@ -50,8 +50,16 @@ class ProjectHandler {
 	public function newProject()
 	{
 		$viewBuilder = new ViewBuilder();
-		$viewBuilder->pickComponent('createProject');
+		$viewName = 'createProject';
+		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->setTitle('Creating Project');
+		$viewBuilder->addVars(
+			$viewName,
+			[
+				'projectNameRegex' => ProjectService::getProjectNameRegex(true),
+				'projectPathRegex' => ProjectService::getProjectPathRegex(true)
+			]
+		);
 		$viewBuilder->render();
 	}
 

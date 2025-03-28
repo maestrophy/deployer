@@ -18,20 +18,21 @@
 		if (projectPathInput) {
 			const container = projectPathInput.parentElement;
 			const infoMessage = container.querySelector('.infoMessage');
-			const errorMessage = container.querySelector('.errorMessage');
+			const pathErrorMessage = container.querySelector('.errorMessage');
 			projectPathInput.addEventListener('change', (event) => {
 				if (event.target.value === '') {
 					projectPathInput.classList.remove('error');
 					infoMessage.style.display = 'none';
-					errorMessage.style.visibility = 'hidden';
-					errorMessage.style.display = 'block';
+					pathErrorMessage.style.visibility = 'hidden';
+					pathErrorMessage.style.display = 'block';
 					stateIndicator.next(false);
 					return;
 				}
 				if (!projectPathInput.checkValidity()) {
+					infoMessage.style.display = 'none';
 					projectPathInput.classList.add('error');
-					errorMessage.innerHTML = 'Invalid pattern!';
-					errorMessage.style.visibility = 'visible';
+					pathErrorMessage.innerHTML = 'Invalid pattern!';
+					pathErrorMessage.style.visibility = 'visible';
 					stateIndicator.next(false);
 					return;
 				}
@@ -52,7 +53,7 @@
 									gitIcon.style.marginRight = '5px';
 									infoMessage.innerHTML = 'This path is a valid git repository';
 									infoMessage.prepend(gitIcon);
-									errorMessage.style.display = 'none';
+									pathErrorMessage.style.display = 'none';
 									infoMessage.style.display = 'block';
 									pathError = false;
 									if (
@@ -66,10 +67,10 @@
 								} else {
 									pathError = true;
 									stateIndicator.next(false);
-									errorMessage.innerHTML = 'This path is not a valid git repository!';
+									pathErrorMessage.innerHTML = 'This path is not a valid git repository!';
 									infoMessage.style.display = 'none';
-									errorMessage.style.display = 'block';
-									errorMessage.style.visibility = 'visible';
+									pathErrorMessage.style.display = 'block';
+									pathErrorMessage.style.visibility = 'visible';
 									projectPathInput.classList.add('error');
 								}
 							}
@@ -80,8 +81,8 @@
 				stateIndicator.next(false);
 				projectPathInput.classList.remove('error');
 				infoMessage.style.display = 'none';
-				errorMessage.style.visibility = 'hidden';
-				errorMessage.style.display = 'block';
+				pathErrorMessage.style.visibility = 'hidden';
+				pathErrorMessage.style.display = 'block';
 			});
 		}
 
@@ -89,10 +90,17 @@
 		let nameError = false;
 		const projectNameInput = document.getElementById('projectName');
 		const nameInputContainer = projectNameInput.parentElement;
-		const errorMessage = nameInputContainer.querySelector('.errorMessage');
+		const nameErrorMessage = nameInputContainer.querySelector('.errorMessage');
 		projectNameInput.addEventListener('change', (event) => {
 			if (event.target.value === '') {
 				stateIndicator.next(false);
+				return;
+			}
+			if (!event.target.checkValidity()) {
+				stateIndicator.next(false);
+				projectNameInput.classList.add('error');
+				nameErrorMessage.innerHTML = 'Invalid project name pattern!';
+				nameErrorMessage.style.visibility = 'visible';
 				return;
 			}
 			http.get(
@@ -102,18 +110,13 @@
 				}
 			).subscribe({
 				next: (response) => {
-					console.log(response);
 					if (response) {
 						if (response.projectExists) {
 							projectNameInput.classList.add('error');
-							errorMessage.innerHTML = 'This project name already exists!';
-							errorMessage.visibility = 'visible';
+							nameErrorMessage.innerHTML = 'This project name already exists!';
+							nameErrorMessage.style.visibility = 'visible';
 							stateIndicator.next(false);
 						} else {
-							console.log(!pathError);
-							console.log(projectPathInput);
-							console.log(projectPathInput.value);
-							console.log(projectPathInput.checkValidity());
 							if (
 								!pathError &&
 								projectPathInput &&
@@ -130,7 +133,7 @@
 		projectNameInput.addEventListener('keydown', (event) => {
 			stateIndicator.next(false);
 			projectNameInput.classList.remove('error');
-			errorMessage.style.visibility = 'hidden';
+			nameErrorMessage.style.visibility = 'hidden';
 		});
 
 		// Add project button
@@ -162,10 +165,8 @@
 											infoMessage.style.display = 'none';
 											errorMessage.style.display = 'block';
 										}
-										console.log(response.message);
 										errorField.classList.add('error');
 										errorMessage.innerHTML = response.message;
-										console.log(errorMessage);
 										errorMessage.style.visibility = 'visible';
 									}
 								}
