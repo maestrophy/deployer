@@ -8,6 +8,12 @@ class ProjectService {
 	private $projectStorageFileName = "projects.json";
 	private static $projectNameRegex = '[a-zA-Z][a-zA-Z0-9\.\-_\s\/]{2,}';
 	private static $projectPathRegex = '\/[a-zA-Z\-_\s\.]+((\/[a-zA-Z\-_\s\.]+)+)?\/?';
+	private static Logger $logger;
+
+	public static function initLogger()
+	{
+		self::$logger = new Logger('', __class__);
+	}
 
 	public function getProject(string $name): Project | null
 	{
@@ -19,9 +25,13 @@ class ProjectService {
 		return null;
 	}
 
-	private function getProjectsStoragePath()
+	private function getProjectsStoragePath(): string
 	{
-		return PathUtil::getCleanPathWithTrailingSlash($this->storagePath) . $this->projectStorageFileName;
+		$path = PathUtil::makeFullPathFromRelative($this->storagePath);
+		if (!is_dir($path)) {
+			mkdir($path, 0777, true);
+		}
+		return $path . $this->projectStorageFileName;
 	}
 
 	public function createNewProject(array $projectData)
@@ -32,6 +42,7 @@ class ProjectService {
 
 	public function getRawAllProjects(): string {
 		$storageFile = $this->getProjectsStoragePath();
+		self::$logger->info('Storage file path', $storageFile);
 		if (!is_file($storageFile)) {
 			return '[]';
 		}
@@ -88,7 +99,7 @@ class ProjectService {
 			throw new Exception('Project path is not defined!', 100002);
 		}
 
-		PathUtil::getCleanFullPathWithTrailingSlash($projectData['projectPath']);
+		PathUtil::makeFullPathFromRelative($projectData['projectPath'], false);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
 
 		if (
@@ -118,7 +129,7 @@ class ProjectService {
 		if (empty($path)) {
 			return false;
 		}
-		PathUtil::getCleanFullPathWithTrailingSlash($path);
+		$path = PathUtil::makeFullPathFromRelative($path);
 		if (!is_dir($path)) {
 			return false;
 		}

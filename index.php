@@ -63,7 +63,9 @@ try {
 	include_once 'Views/ViewBuilder.php';
 	include_once 'Services/ProjectService.php';
 	include_once 'Models/Project.php';
+	include_once 'Services/LogService.php';
 	include_once 'Handlers/' . $handler . '.php';
+	ProjectService::initLogger();
 	$_POST = json_decode(file_get_contents('php://input'), true);
 
 	/**
@@ -87,7 +89,9 @@ try {
 	echo $e->getMessage();
 	$trace = $e->getTrace();
 	foreach ($trace as $unit) {
-		echo '<br>';
-		echo $unit['file'] . ': ' . $unit['line'];
+		if (!empty($unit['file']) && !empty($unit['line'])) {
+			echo '<br>';
+			echo $unit['file'] . ': ' . $unit['line'];
+		}
 	}
 }

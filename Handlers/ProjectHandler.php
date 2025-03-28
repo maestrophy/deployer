@@ -2,6 +2,13 @@
 
 class ProjectHandler {
 
+	private Logger $logger;
+
+	function __construct()
+	{
+			$this->logger = new Logger('', __class__);
+	}
+
 	/**
 	 * Undocumented function
 	 * 
@@ -53,6 +60,11 @@ class ProjectHandler {
 		$viewName = 'createProject';
 		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->setTitle('Creating Project');
+		$this->logger->info('Logger works');
+		$this->logger->info('View vars', [
+			'projectNameRegex' => ProjectService::getProjectNameRegex(true),
+			'projectPathRegex' => ProjectService::getProjectPathRegex(true)
+		]);
 		$viewBuilder->addVars(
 			$viewName,
 			[
