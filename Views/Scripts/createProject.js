@@ -153,8 +153,11 @@
 				}).subscribe({
 					next: (response) => {
 						if (response && response.status) {
-							if (response.status === 'success') {
-								//
+							if (
+								response.status === 'success' &&
+								typeof response.newProjectName === 'string'
+							) {
+								window.location.href = 'projects/' . response.newProjectName;
 							} else {
 								if (response.field && response.message) {
 									const errorField = document.getElementById(response.field);

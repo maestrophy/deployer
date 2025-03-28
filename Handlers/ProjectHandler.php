@@ -60,11 +60,6 @@ class ProjectHandler {
 		$viewName = 'createProject';
 		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->setTitle('Creating Project');
-		$this->logger->info('Logger works');
-		$this->logger->info('View vars', [
-			'projectNameRegex' => ProjectService::getProjectNameRegex(true),
-			'projectPathRegex' => ProjectService::getProjectPathRegex(true)
-		]);
 		$viewBuilder->addVars(
 			$viewName,
 			[
@@ -89,6 +84,7 @@ class ProjectHandler {
 		try {
 			(new ProjectService())->createNewProject($_POST);
 			$response['status'] = 'success';
+			$response['newProjectName'] = $_POST['projectName'];
 		} catch (Throwable $e) {
 			$response['status'] = 'failed';
 			$response['message'] = $e->getMessage();
