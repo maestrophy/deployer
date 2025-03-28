@@ -100,7 +100,7 @@ class ProjectService {
 			throw new Exception('Project path is not defined!', 100002);
 		}
 
-		PathUtil::makeFullPathFromRelative($projectData['projectPath'], false);
+		PathUtil::makeFullPathFromRelative($projectData['projectPath']);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
 
 		if (
