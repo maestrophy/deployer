@@ -45,4 +45,9 @@ class Project {
 	{
 		return $this->name;
 	}
+
+	public function getUrlEncodedProjectName(): string
+	{
+		return urlencode($this->getProjectName());
+	}
 }

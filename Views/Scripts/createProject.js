@@ -158,7 +158,7 @@
 								response.newProjectName &&
 								typeof response.newProjectName === 'string'
 							) {
-								window.location.href = 'projects/' + response.newProjectName;
+								window.location.href = 'projects/' + response.newProjectName.replace('/', '%2F');
 							} else {
 								if (response.field && response.message) {
 									const errorField = document.getElementById(response.field);

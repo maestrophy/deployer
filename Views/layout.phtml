@@ -129,7 +129,7 @@
 				<?php
 					foreach ($projects as $project) {
 						?>
-						<a class="anchor-button" href="/new-project">
+						<a class="anchor-button" href="/projects/<?= $project->getUrlEncodedProjectName() ?>">
 							<?php echo $project->getProjectName(); ?>
 						</a>
 						<?php

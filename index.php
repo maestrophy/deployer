@@ -28,7 +28,7 @@ try {
 	foreach ($endpoints as $options) {
 		$endpoint = $options['uri'];
 		$patterns = empty($options['patterns']) ? [] : $options['patterns'];
-		preg_match_all('/\{([a-zA-Z0-9\-\_]+)\}/', $endpoint, $wildCards);
+		preg_match_all('/\{([a-zA-Z0-9\-\_%]+)\}/', $endpoint, $wildCards);
 		$vars = [];
 		if (!empty($wildCards[1])) {
 			$varNames = $wildCards[1];
