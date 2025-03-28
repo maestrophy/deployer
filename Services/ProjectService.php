@@ -95,6 +95,7 @@ class ProjectService {
 
 	public static function validateProjectData(array &$projectData): bool
 	{
+		self::$logger->info('Project data', $projectData);
 		if (empty($projectData['projectPath'])) {
 			throw new Exception('Project path is not defined!', 100002);
 		}
@@ -105,6 +106,7 @@ class ProjectService {
 		if (
 			empty($projectData['projectName']) ||
 			!preg_match(static::getProjectNameRegex(), $projectData['projectName'])) {
+			self::$logger->warning('Tried project name', $projectData['projectName']);
 			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
 
@@ -112,6 +114,7 @@ class ProjectService {
 			throw new Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
 		if (!is_dir($projectData['projectPath'] . '.git') || $isGitRepo === 0) {
+			self::$logger->warning('The given path is not containing any .git directory!', $projectData['projectPath']);
 			throw new Exception('The given path is not a valid git repository!', 100002);
 		}
 		if (!isset($projectData['scripts'])) {
