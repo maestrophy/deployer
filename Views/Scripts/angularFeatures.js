@@ -437,6 +437,7 @@ HttpClient.prototype = {
 						});
 					}
 				}
+				console.log(xhttp.responseText);
 				observable.complete();
 			}
 		};

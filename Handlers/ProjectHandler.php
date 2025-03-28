@@ -85,6 +85,7 @@ class ProjectHandler {
 			(new ProjectService())->createNewProject($_POST);
 			$response['status'] = 'success';
 			$response['newProjectName'] = $_POST['projectName'];
+			$this->logger->info('Project created, response', $response);
 		} catch (Throwable $e) {
 			$response['status'] = 'failed';
 			$response['message'] = $e->getMessage();

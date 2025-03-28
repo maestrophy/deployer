@@ -152,9 +152,11 @@
 					projectName: name
 				}).subscribe({
 					next: (response) => {
+						console.log(response);
 						if (response && response.status) {
 							if (
 								response.status === 'success' &&
+								response.newProjectName &&
 								typeof response.newProjectName === 'string'
 							) {
 								window.location.href = 'projects/' . response.newProjectName;
