@@ -8,7 +8,7 @@ return [
 		'uri' => 'projects/{projectName}',
 		'handler' => 'Project',
 		'patterns' => [
-			'projectName' => '[a-zA-Z_0-9\-]+'
+			'projectName' => '[a-zA-Z_0-9\-\+%]+'
 		],
 		'action' => 'listBranches',
 		'methods' => 'GET'

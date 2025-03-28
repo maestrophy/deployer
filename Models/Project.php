@@ -16,15 +16,6 @@ class Project {
 		$this->name = $data['projectName'];
 		$this->path = $data['projectPath'];
 		$this->scripts = $data['scripts'];
-		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
-		$branchesOutput = CommandService::runCommandAsUserInFolder('git branch -r', $this->path);
-		$this->branches = array_map(fn ($branch) => str_replace('origin/', '', $branch), $branchesOutput);
-		$activeBranchesOutput = CommandService::runCommandAsUserInFolder('git branch', $this->path);
-		foreach ($activeBranchesOutput as $outputLine) {
-			if (substr($outputLine, 0, 2) === '* ') {
-				$this->activeBranch = substr($outputLine, 2);
-			}
-		}
 	}
 
 	public function checkout(string $branchName)
@@ -49,5 +40,24 @@ class Project {
 	public function getUrlEncodedProjectName(): string
 	{
 		return urlencode($this->getProjectName());
+	}
+
+	public function getBranchList(): array
+	{
+		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
+		$branchesOutput = CommandService::runCommandAsUserInFolder('git branch -r', $this->path);
+		return array_map(fn ($branch) => str_replace('origin/', '', $branch), $branchesOutput);
+	}
+
+	public function getActiveBranch(): string
+	{
+		$activeBranch = '';
+		$activeBranchesOutput = CommandService::runCommandAsUserInFolder('git branch', $this->path);
+		foreach ($activeBranchesOutput as $outputLine) {
+			if (substr($outputLine, 0, 2) === '* ') {
+				$activeBranch = substr($outputLine, 2);
+			}
+		}
+		return $activeBranch;
 	}
 }
