@@ -179,7 +179,7 @@ class Logger {
 	{
 		$this->logPath = ltrim(
 			preg_replace(
-				'/^(..|.\/|\/)/',
+				'/^(\.\.|\.\/)/',
 				'',
 				str_replace(
 					'/../',
