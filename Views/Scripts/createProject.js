@@ -159,6 +159,7 @@
 								response.newProjectName &&
 								typeof response.newProjectName === 'string'
 							) {
+								console.log(response);
 								window.location.href = 'projects/' . response.newProjectName;
 							} else {
 								if (response.field && response.message) {
