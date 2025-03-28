@@ -19,7 +19,20 @@ class ProjectHandler {
 	 * @return void
 	 */
 	public function listBranches(string $projectName)
-	{}
+	{
+		$viewBuilder = new ViewBuilder();
+		$viewName = 'projectDetails';
+		$viewBuilder->pickComponent($viewName);
+		$viewBuilder->setTitle('Project Details');
+		/* $viewBuilder->addVars(
+			$viewName,
+			[
+				'projectNameRegex' => ProjectService::getProjectNameRegex(true),
+				'projectPathRegex' => ProjectService::getProjectPathRegex(true)
+			]
+		); */
+		$viewBuilder->render();
+	}
 
 	/**
 	 * Undocumented function
@@ -85,7 +98,6 @@ class ProjectHandler {
 			(new ProjectService())->createNewProject($_POST);
 			$response['status'] = 'success';
 			$response['newProjectName'] = $_POST['projectName'];
-			$this->logger->info('Project created, response', $response);
 		} catch (Throwable $e) {
 			$response['status'] = 'failed';
 			$response['message'] = $e->getMessage();

@@ -152,15 +152,13 @@
 					projectName: name
 				}).subscribe({
 					next: (response) => {
-						console.log(response);
 						if (response && response.status) {
 							if (
 								response.status === 'success' &&
 								response.newProjectName &&
 								typeof response.newProjectName === 'string'
 							) {
-								console.log(response);
-								window.location.href = 'projects/' . response.newProjectName;
+								window.location.href = 'projects/' + response.newProjectName;
 							} else {
 								if (response.field && response.message) {
 									const errorField = document.getElementById(response.field);
