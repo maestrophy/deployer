@@ -35,6 +35,7 @@ class PathUtil {
 
 	public static function makeFullPathFromRelative(string $path, bool $withTrailingSlash = true): string
 	{
+		$logger = new Logger('', __class__);
 		$root = $_SERVER['DOCUMENT_ROOT'];
 		if (substr($path, 0, strlen($root)) !== $root && substr($path, 0, 1) !== '/') {
 			$path = $root . (substr($path, 0, 1) === '/' ? '' : '/') . $path;
@@ -56,6 +57,8 @@ class PathUtil {
 				$finalPathParts[] = $part;
 			}
 		}
+		$logger->info($withTrailingSlash);
+		$logger->info('/' . join('/', $finalPathParts) . ($withTrailingSlash ? '/' : ''));
 		return '/' . join('/', $finalPathParts) . ($withTrailingSlash ? '/' : '');
 	}
 }

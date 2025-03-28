@@ -101,7 +101,9 @@ class ProjectService {
 		}
 
 		PathUtil::makeFullPathFromRelative($projectData['projectPath']);
+		self::$logger->info('Project path', $projectData['projectPath']);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
+		self::$logger->info('Project path', $projectData['projectPath']);
 
 		if (
 			empty($projectData['projectName']) ||
@@ -109,10 +111,12 @@ class ProjectService {
 			self::$logger->warning('Tried project name', $projectData['projectName']);
 			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
+		self::$logger->info('Project path', $projectData['projectPath']);
 
 		if (!is_dir($projectData['projectPath'])) {
 			throw new Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
+		self::$logger->info('Project path', $projectData['projectPath']);
 		if (!is_dir($projectData['projectPath'] . '.git') || $isGitRepo === 0) {
 			self::$logger->warning('The given path is not containing any .git directory!', $projectData['projectPath']);
 			throw new Exception('The given path is not a valid git repository!', 100002);
