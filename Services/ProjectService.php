@@ -1,6 +1,10 @@
 <?php
 
-include_once 'Models/Project.php';
+namespace Services;
+
+use Models\Project;
+use Services\Logger;
+use Utils\PathUtil;
 
 class ProjectService {
 
@@ -70,14 +74,14 @@ class ProjectService {
 			fn ($project) => $project['projectPath'] === $projectData['projectPath']
 		);
 		if (count($duplicates) > 0) {
-			throw new Exception('Project is existing for that path: ' . array_values($duplicates)[0]['projectPath']);
+			throw new \Exception('Project is existing for that path: ' . array_values($duplicates)[0]['projectPath']);
 		}
 		$duplicates = array_filter(
 			$projects,
 			fn ($project) => $project['projectName'] === $projectData['projectName']
 		);
 		if (count($duplicates) > 0) {
-			throw new Exception('A project is already existing with this name!');
+			throw new \Exception('A project is already existing with this name!');
 		}
 		array_push($projects, $projectData);
 		file_put_contents($this->getProjectsStoragePath(), json_encode($projects));
@@ -97,7 +101,7 @@ class ProjectService {
 	{
 		self::$logger->info('Project data', $projectData);
 		if (empty($projectData['projectPath'])) {
-			throw new Exception('Project path is not defined!', 100002);
+			throw new \Exception('Project path is not defined!', 100002);
 		}
 
 		$projectData['projectPath'] = PathUtil::makeFullPathFromRelative($projectData['projectPath']);
@@ -109,24 +113,24 @@ class ProjectService {
 			empty($projectData['projectName']) ||
 			!preg_match(static::getProjectNameRegex(), $projectData['projectName'])) {
 			self::$logger->warning('Tried project name', $projectData['projectName']);
-			throw new Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
+			throw new \Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
 		self::$logger->info('Project path', $projectData['projectPath']);
 
 		if (!is_dir($projectData['projectPath'])) {
-			throw new Exception('The given path is not valid, it does not exist on the server!', 100002);
+			throw new \Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
 		self::$logger->info('Project path', $projectData['projectPath']);
 		if (!is_dir($projectData['projectPath'] . '.git') || $isGitRepo === 0) {
 			self::$logger->warning('The given path is not containing any .git directory!', $projectData['projectPath']);
-			throw new Exception('The given path is not a valid git repository!', 100002);
+			throw new \Exception('The given path is not a valid git repository!', 100002);
 		}
 		if (!isset($projectData['scripts'])) {
 			$projectData['scripts'] = [];
 		} else if (is_string($projectData['scripts'])) {
 			$projectData['scripts'] = [$projectData['scripts']];
 		} else if (!is_array($projectData['scripts'])) {
-			throw new Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
+			throw new \Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
 		}
 		return true;
 	}
@@ -146,7 +150,7 @@ class ProjectService {
 		try {
 			CommandService::runCommandAsUser("git -C " . escapeshellarg($path) . " rev-parse --is-inside-work-tree 2>/dev/null");
 			$exitCode = 0;
-		} catch(Exception $e) {
+		} catch(\Exception $e) {
 			$exitCode = 1;
 			exit($e->getMessage());
 		}

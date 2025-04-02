@@ -1,5 +1,6 @@
 <?php
 
+namespace Services;
 class CommandService {
 
 	public static function runCommandsAsUser(array $commands): bool
@@ -8,7 +9,7 @@ class CommandService {
 		foreach ($commands as $command) {
 			exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
 			if ($exitCode !== 0) {
-				throw new Exception(join("\n", $output));
+				throw new \Exception(join("\n", $output));
 			}
 		}
 		return true;
@@ -19,7 +20,7 @@ class CommandService {
 		$userConfig = include 'config.php';
 		exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
 		if ($exitCode !== 0) {
-			throw new Exception(join("\n", $output));
+			throw new \Exception(join("\n", $output));
 		}
 		return $output;
 	}
@@ -30,7 +31,7 @@ class CommandService {
 		foreach ($commands as $command) {
 			exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 			if ($exitCode !== 0) {
-				throw new Exception(var_export($output));
+				throw new \Exception(var_export($output));
 			}
 		}
 		return true;
@@ -41,7 +42,7 @@ class CommandService {
 		$userConfig = include 'config.php';
 		exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 		if ($exitCode !== 0) {
-			throw new Exception(join("\n", $output));
+			throw new \Exception(join("\n", $output));
 		}
 		return $output;
 	}

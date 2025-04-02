@@ -1,5 +1,7 @@
 <?php
 
+namespace Utils;
+
 class OutputUtil {
 
 	public static function onProgressOutput(array $message)

@@ -1,5 +1,9 @@
 <?php
 
+namespace Services;
+
+use Utils\PathUtil;
+
 class Logger {
 
 	private static $logRoot = 'Logs';
@@ -82,7 +86,7 @@ class Logger {
 					break;
 				}
 				if ($x > 2000000) {
-					throw new Exception('Infinite loop in loging, or too many sideEffect files!');
+					throw new \Exception('Infinite loop in loging, or too many sideEffect files!');
 					break;
 				}
 			}
@@ -145,7 +149,7 @@ class Logger {
 	private function isLogging($messageLevel): bool
 	{
 		if (!is_numeric($messageLevel) && !array_key_exists($messageLevel, $this->logLevelMapping)) {
-			throw new Exception('Log level for "' . $messageLevel . '" is not recognizable!');
+			throw new \Exception('Log level for "' . $messageLevel . '" is not recognizable!');
 		}
 		if (array_key_exists($messageLevel, $this->logLevelMapping)) {
 			$messageLevel = $this->logLevelMapping[$messageLevel];
@@ -171,7 +175,7 @@ class Logger {
 		if (!empty($logSubject)) {
 			$this->logSubject = $logSubject;
 		} else {
-			throw new Error('Tried to set logsubject to an empty value!');
+			throw new \Error('Tried to set logsubject to an empty value!');
 		}
 	}
 
@@ -194,7 +198,7 @@ class Logger {
 	public function setLogFileName(string $logFileName)
 	{
 		if (empty($logFileName)) {
-			throw new Error('Tried to set log file name to an empty value!');
+			throw new \Error('Tried to set log file name to an empty value!');
 		}
 
 		$this->logFileName = preg_replace(
@@ -222,7 +226,7 @@ class Logger {
 
 	public function setDateLogLevel(string $date, $logLevel = 100, $override = false): bool
 	{
-		$date = (new DateTime($date))->format('Y-m-d H:i:s');
+		$date = (new \DateTime($date))->format('Y-m-d H:i:s');
 		if (empty($this->dateDependingLogLevels[$date]) || $override) {
 			$this->dateDependingLogLevels[$date] = max(min($logLevel, 100), 0);
 			return true;

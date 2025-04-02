@@ -1,6 +1,12 @@
 <?php
 
-class ProjectHandler {
+namespace Handlers;
+
+use Services\Logger;
+use Services\ProjectService;
+use Views\ViewBuilder;
+
+class ProjectHandler extends AbstractHandler {
 
 	private Logger $logger;
 
@@ -8,6 +14,9 @@ class ProjectHandler {
 	{
 			$this->logger = new Logger('', __class__);
 	}
+
+	public function index()
+	{}
 
 	/**
 	 * Undocumented function
@@ -20,17 +29,19 @@ class ProjectHandler {
 	 */
 	public function listBranches(string $projectName)
 	{
+		$projectService = new ProjectService();
+		$projectService->getProject($projectName);
 		$viewBuilder = new ViewBuilder();
 		$viewName = 'projectDetails';
 		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->setTitle('Project Details');
-		/* $viewBuilder->addVars(
+		$viewBuilder->addVars(
 			$viewName,
 			[
 				'projectNameRegex' => ProjectService::getProjectNameRegex(true),
 				'projectPathRegex' => ProjectService::getProjectPathRegex(true)
 			]
-		); */
+		);
 		$viewBuilder->render();
 	}
 
@@ -98,7 +109,7 @@ class ProjectHandler {
 			(new ProjectService())->createNewProject($_POST);
 			$response['status'] = 'success';
 			$response['newProjectName'] = $_POST['projectName'];
-		} catch (Throwable $e) {
+		} catch (\Throwable $e) {
 			$response['status'] = 'failed';
 			$response['message'] = $e->getMessage();
 			if (!empty($e->getCode()) && in_array($e->getCode(), [100001, 100002])) {

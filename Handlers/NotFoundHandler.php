@@ -1,6 +1,8 @@
 <?php
 
-class NotFoundHandler {
+namespace Handlers;
+
+class NotFoundHandler extends AbstractHandler {
 	
 	/**
 	 * Undocumented function

@@ -1,6 +1,6 @@
 <?php
 
-include_once 'Services/CommandService.php';
+namespace Models;
 
 class Project {
 

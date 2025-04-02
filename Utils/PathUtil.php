@@ -1,5 +1,7 @@
 <?php
 
+namespace Utils;
+
 class PathUtil {
 
 	public static function getCleanPathWithTrailingSlash(string &$path)
@@ -49,7 +51,7 @@ class PathUtil {
 		foreach ($pathParts as $part) {
 			if ($part === '..') {
 				if (count($finalPathParts) === 0) {
-					throw new Exception('Trying to get upper, than root in directory structure!');
+					throw new \Exception('Trying to get upper, than root in directory structure!');
 				}
 				array_pop($finalPathParts);
 			} else {

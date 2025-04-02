@@ -1,6 +1,10 @@
 <?php
 
-include_once 'Utils/PathUtil.php';
+namespace Views;
+
+use Services\ProjectService;
+use Utils\PathUtil;
+
 class ViewBuilder {
 
 	private array $views = [];

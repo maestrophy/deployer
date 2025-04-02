@@ -1,6 +1,10 @@
 <?php
 
-class MainHandler {
+namespace Handlers;
+
+use Views\ViewBuilder;
+
+class MainHandler extends AbstractHandler {
 
 	public function index()
 	{
