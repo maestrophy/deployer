@@ -2,6 +2,9 @@
 
 namespace Models;
 
+use Services\CommandService;
+use Services\ProjectService;
+
 class Project {
 
 	private string $name;
