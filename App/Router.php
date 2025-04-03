@@ -202,7 +202,7 @@ class Router {
 				)
 			) {
 				for ($x = 1; $x < count($matches); $x++) {
-					$this->urlParams[$varNames[$x - 1]] = $matches[$x];
+					$this->urlParams[$varNames[$x - 1]] = urldecode($matches[$x]);
 				}
 				$this->actionName =
 					empty($options['action']) ?
