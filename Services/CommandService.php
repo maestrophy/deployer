@@ -3,6 +3,8 @@
 namespace Services;
 class CommandService {
 
+	private static Logger $logger;
+
 	public static function runCommandsAsUser(array $commands): bool
 	{
 		$userConfig = include 'config.php';
@@ -39,8 +41,13 @@ class CommandService {
 
 	public static function runCommandAsUserInFolder(string $command, string $path): array
 	{
+		if (empty(self::$logger)) {
+			self::$logger = new Logger('', __CLASS__);
+		}
 		$userConfig = include 'config.php';
-		exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+		self::$logger->info('Output', $output);
+		self::$logger->info('Result', $result);
 		if ($exitCode !== 0) {
 			throw new \Exception(join("\n", $output));
 		}

@@ -39,6 +39,10 @@ class Logger {
 		string $logSubject = 'App'
 	)
 	{
+		if (strpos($fileName, '\\') && class_exists($fileName)) {
+			$classNameParts = explode('\\', $fileName);
+			$fileName = end($classNameParts);
+		}
 		$this->setLogSubject($logSubject);
 		$this->setLogPath($logPath);
 		$this->setLogFileName($fileName);

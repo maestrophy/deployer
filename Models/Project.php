@@ -3,6 +3,7 @@
 namespace Models;
 
 use Services\CommandService;
+use Services\Logger;
 use Services\ProjectService;
 
 class Project {
@@ -12,9 +13,11 @@ class Project {
 	private array $scripts;
 	private array $branches;
 	private string $activeBranch;
+	private Logger $logger;
 
 	function __construct(array $data)
 	{
+		$this->logger = new Logger('', __CLASS__);
 		ProjectService::validateProjectData($data);
 		$this->name = $data['projectName'];
 		$this->path = $data['projectPath'];
@@ -49,6 +52,7 @@ class Project {
 	{
 		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
 		$branchesOutput = CommandService::runCommandAsUserInFolder('git branch -r', $this->path);
+		$this->logger->info('Branchlist', $branchesOutput);
 		return array_map(fn ($branch) => str_replace('origin/', '', $branch), $branchesOutput);
 	}
 
