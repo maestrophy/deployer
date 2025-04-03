@@ -9,6 +9,7 @@ class ViewBuilder {
 
 	private array $views = [];
 	private array $viewVars = [];
+	private array $jsVars = [];
 	private array $styles = [];
 	private array $scripts = [];
 	private string $title = 'Deployer';
@@ -74,6 +75,21 @@ class ViewBuilder {
 		}
 	}
 
+	public function addJSVars(string $viewName, array $vars)
+	{
+		$acceptableKeys = array_filter(
+			array_keys($vars),
+			fn ($key) =>
+				is_string($key) && preg_match('/^[a-zA-Z_][a-zA-Z_0-9]+$/', $key)
+		);
+		if (!isset($this->jsVars[$viewName])) {
+			$this->jsVars[$viewName] = [];
+		}
+		foreach ($acceptableKeys as $key) {
+			$this->jsVars[$viewName][$key] = $vars[$key];
+		}
+	}
+
 	public function setViewVar(string $viewName, string $varName, $value)
 	{
 		if (preg_match('/^[a-zA-Z_][a-zA-Z_0-9]+$/', $varName)) {
@@ -111,7 +127,35 @@ class ViewBuilder {
 		$styles = $this->styles;
 		$scripts = $this->scripts;
 		$title = $this->title;
+		$jsVars = $this->jsVars;
 		$vars = $this->getViewVarsForRender();
+		$addJsVars = function ($vars) {
+			if (!empty($vars)) {
+				echo "<script>";
+				foreach ($vars as $varName => $value) {
+					switch (gettype($value)) {
+						case 'string':
+							echo "var " . $varName . " = '" . $value . "';";
+							break;
+						case 'integer':
+						case 'double':
+							echo "var " . $varName . " = " . $value . ";";
+							break;
+						case 'boolean':
+							echo "var " . $varName . " = " . ($value ? 'true' : 'false') . ";";
+							break;
+						case 'object':
+						case 'array':
+							echo "var " . $varName . " = JSON.parse('" . json_encode($value) . "');";
+							break;
+						case 'NULL':
+							echo "var " . $varName . " = null;";
+							break;
+					}
+				}
+				echo "</script>";
+			}
+		};
 		if (!empty($this->layout)) {
 			foreach ($this->layoutVars as $varName => $value) {
 				$$varName = $value;

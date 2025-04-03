@@ -1,7 +1,16 @@
 <div class="centered">
 	<section class="formSection">
-		<form id="projectCreateForm">
-			<span>Project details</span>
+		<form id="branchHandlingForm">
+			<h2>Branches</h2>
+			<select>
+				<? foreach ($branches as $branch) : ?>
+					<?= '<option value="' . $branch . '" ' . ($activeBranch === $branch ? 'selected' : '') . '>' . $branch . '</option>' ?>
+				<? endforeach; ?>
+			</select>
+		</form>
+		<hr />
+		<form id="scriptHandlingForm">
+			<h2>Build scripts</h2>
 		</form>
 	</section>
 </div>

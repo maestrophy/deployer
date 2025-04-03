@@ -60,4 +60,19 @@ class PathUtil {
 		}
 		return '/' . join('/', $finalPathParts) . ($withTrailingSlash ? '/' : '');
 	}
+
+	public static function validatePath(string $path, bool $throwException = false)
+	{
+		$path = self::makeFullPathFromRelative($path);
+		if (!is_dir($path)) {
+			if ($throwException) {
+				throw new \Exception('Path is not valid! (' . $path . ')');
+			} else {
+				return false;
+			}
+		}
+		if (!$throwException) {
+			return true;
+		}
+	}
 }

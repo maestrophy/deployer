@@ -63,4 +63,9 @@ class Project {
 		}
 		return $activeBranch;
 	}
+
+	public function getBuildScripts(): array
+	{
+		return $this->scripts;
+	}
 }

@@ -127,9 +127,22 @@ class ProjectService {
 		}
 		if (!isset($projectData['scripts'])) {
 			$projectData['scripts'] = [];
-		} else if (is_string($projectData['scripts'])) {
-			$projectData['scripts'] = [$projectData['scripts']];
 		} else if (!is_array($projectData['scripts'])) {
+			throw new \Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
+		} else if (
+			count(
+				array_filter(
+					$projectData['scripts'],
+					fn ($script) => (
+						!is_array($script) ||
+						empty($script['schedule']) ||
+						empty($script['targetPath']) ||
+						!PathUtil::validatePath($script['targetPath']) ||
+						!in_array($script['schedule'], ['beforePull', 'afterPull'])
+					)
+				)
+			) > 0
+		) {
 			throw new \Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
 		}
 		return true;

@@ -30,7 +30,7 @@ class ProjectHandler extends AbstractHandler {
 	public function listBranches(string $projectName)
 	{
 		$projectService = new ProjectService();
-		$projectService->getProject($projectName);
+		$project = $projectService->getProject($projectName);
 		$viewBuilder = new ViewBuilder();
 		$viewName = 'projectDetails';
 		$viewBuilder->pickComponent($viewName);
@@ -38,8 +38,10 @@ class ProjectHandler extends AbstractHandler {
 		$viewBuilder->addVars(
 			$viewName,
 			[
-				'projectNameRegex' => ProjectService::getProjectNameRegex(true),
-				'projectPathRegex' => ProjectService::getProjectPathRegex(true)
+				'project' => $project,
+				'branches' => $project->getBranchList(),
+				'activeBranch' => $project->getActiveBranch(),
+				'buildScripts' => $project->getBuildScripts()
 			]
 		);
 		$viewBuilder->render();
