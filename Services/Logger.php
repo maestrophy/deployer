@@ -39,7 +39,7 @@ class Logger {
 		string $logSubject = 'App'
 	)
 	{
-		if (strpos($fileName, '\\') && class_exists($fileName)) {
+		if (strpos($fileName, '\\') !== false && class_exists($fileName)) {
 			$classNameParts = explode('\\', $fileName);
 			$fileName = end($classNameParts);
 		}
@@ -185,6 +185,10 @@ class Logger {
 
 	public function setLogPath(string $logPath)
 	{
+		if (empty($logPath)) {
+			$this->logPath = '';
+			return;
+		}
 		$this->logPath = ltrim(
 			preg_replace(
 				'/^(\.\.|\.\/)/',
