@@ -24,7 +24,7 @@ class ProjectService {
 		$projectsData = $this->getAllProjectsAsArray();
 		$result = array_filter($projectsData, fn ($item) => !empty($item['projectName']) && $item['projectName'] === $name);
 		if (count($result) > 0) {
-			return new Project($result);
+			return new Project($result[0]);
 		}
 		return null;
 	}
