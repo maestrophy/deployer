@@ -4,6 +4,7 @@
 		<script src="Views/Scripts/app.js"></script>
 		<script src="Views/Scripts/angularFeatures.js"></script>
 		<?php
+			$addJsVars($jsVars);
 			foreach ($scripts as $script) {
 				echo "<script src=\"" . $script . "\"></script>";
 			}
@@ -74,15 +75,6 @@
 				top: 2px;
 				left: 2px;
 			}
-			/*.sidePanel a.anchor-button span.cross {
-				border-radius: 25px;
-				display: inline-block;
-				background-color: rgb(210, 245, 220);
-				padding: 5px;
-				height: 25px;
-				width: 25px;
-				border: 1px solid rgb(200, 200, 200);
-			}*/
 			.sidePanel a.anchor-button .plus-circle {
 				width: 20px;
 				height: 20px;

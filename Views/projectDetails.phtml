@@ -2,11 +2,19 @@
 	<section class="formSection">
 		<form id="branchHandlingForm">
 			<h2>Branches</h2>
-			<select>
-				<? foreach ($branches as $branch) : ?>
-					<?= '<option value="' . $branch . '" ' . ($activeBranch === $branch ? 'selected' : '') . '>' . $branch . '</option>' ?>
-				<? endforeach; ?>
-			</select>
+			<div class="inputHolder">
+				<label for="projectPath">
+						<div class="labelSpan">Branches</div>
+				</label>
+				<select class="searchable" name="branchSelector" id ="branchSelector">
+					<? foreach ($branches as $branch) : ?>
+						<?= '<option value="' . $branch . '" ' . ($activeBranch === $branch ? 'selected' : '') . '>' . $branch . '</option>' ?>
+					<? endforeach; ?>
+				</select>
+			</div>
+			<div>
+				<button id="deployBtn">Update</button>
+			</div>
 		</form>
 		<hr />
 		<form id="scriptHandlingForm">
@@ -14,3 +22,5 @@
 		</form>
 	</section>
 </div>
+
+["  origin\/HEAD -> origin\/main","  origin\/main"]

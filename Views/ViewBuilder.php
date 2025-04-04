@@ -75,18 +75,15 @@ class ViewBuilder {
 		}
 	}
 
-	public function addJSVars(string $viewName, array $vars)
+	public function addJSVars(array $vars)
 	{
 		$acceptableKeys = array_filter(
 			array_keys($vars),
 			fn ($key) =>
 				is_string($key) && preg_match('/^[a-zA-Z_][a-zA-Z_0-9]+$/', $key)
 		);
-		if (!isset($this->jsVars[$viewName])) {
-			$this->jsVars[$viewName] = [];
-		}
 		foreach ($acceptableKeys as $key) {
-			$this->jsVars[$viewName][$key] = $vars[$key];
+			$this->jsVars[$key] = $vars[$key];
 		}
 	}
 

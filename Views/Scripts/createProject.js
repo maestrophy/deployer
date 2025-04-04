@@ -182,3 +182,4 @@
 		}
 	});
 })();
+console.log(messageFromPhp);

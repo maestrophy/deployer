@@ -23,16 +23,27 @@ div.inputHolder input[type=text] {
 	height: 40px;
 	font-size: 14pt;
 }
+div.inputHolder select {
+	margin-top: none;
+	padding: 5px;
+	width: 312px;
+	height: 52px;
+	font-size: 14pt;
+	border: 2px inset rgb(118, 118, 118);
+}
 div.inputHolder input[type=number].error,
-div.inputHolder input[type=text].error {
+div.inputHolder input[type=text].error,
+div.inputHolder select.error {
 	box-shadow: 0 0 5px red;
 	border: 2px solid red;
 }
 div.inputHolder input,
+div.inputHolder select,
 div.inputHolder label {
 	display: block;
 }
-div.inputHolder input {
+div.inputHolder input,
+div.inputHolder select {
 	border-radius: 0 8px 8px 8px;
 }
 div.inputHolder label {

@@ -35,15 +35,17 @@ class ProjectHandler extends AbstractHandler {
 		$viewName = 'projectDetails';
 		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->setTitle('Project Details');
+		$currentlyActiveBranch = $project->getActiveBranch();
 		$viewBuilder->addVars(
 			$viewName,
 			[
 				'project' => $project,
 				'branches' => $project->getBranchList(),
-				'activeBranch' => $project->getActiveBranch(),
+				'activeBranch' => $currentlyActiveBranch,
 				'buildScripts' => $project->getBuildScripts()
 			]
 		);
+		$viewBuilder->addJSVars(['currentlyActiveBranch' => $currentlyActiveBranch]);
 		$viewBuilder->render();
 	}
 
