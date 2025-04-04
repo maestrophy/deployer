@@ -29,7 +29,10 @@ class ProjectHandler extends AbstractHandler {
 	 */
 	public function listBranches(string $projectName)
 	{
-		$projectService = new ProjectService();
+		/**
+		 * @var ProjectService
+		 */
+		$projectService = $this->di->get('projectService');
 		$project = $projectService->getProject($projectName);
 		$viewBuilder = new ViewBuilder();
 		$viewName = 'projectDetails';
@@ -59,7 +62,15 @@ class ProjectHandler extends AbstractHandler {
 	 * @return void
 	 */
 	public function deploy(string $projectName)
-	{}
+	{
+		/**
+		 * @var ProjectService
+		 */
+		$projectService = $this->di->get('projectService');
+		$project = $projectService->getProject($projectName);
+		$project->setDi($this->di);
+		$project->checkout($this->get('branch'));
+	}
 
 	/**
 	 * Undocumented function

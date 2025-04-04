@@ -17,16 +17,16 @@ return [
 		'uri' => 'projects/{projectName}/deploy',
 		'handler' => 'Project',
 		'patterns' => [
-			'projectName' => '[a-zA-Z_0-9\-]+'
+			'projectName' => '[a-zA-Z_0-9\-\+%]+'
 		],
 		'action' => 'deploy',
-		'methods' => 'POST'
+		'methods' => 'PATCH'
 	],
 	[
 		'uri' => 'projects/{projectName}/scripts',
 		'handler' => 'Project',
 		'patterns' => [
-			'projectName' => '[a-zA-Z_0-9\-]+'
+			'projectName' => '[a-zA-Z_0-9\-\+%]+'
 		],
 		'action' => 'changeScript',
 		'methods' => 'POST'

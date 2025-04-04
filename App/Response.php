@@ -27,6 +27,8 @@ class Response {
 		ob_flush();
 		flush();
 		ob_get_clean();
+		unset($this->literalCurrentContent);
+		unset($this->currentContent);
 	}
 
 	private function guessContentType(): string
@@ -168,6 +170,8 @@ class Response {
 		}
 		$this->setRequiredHeaders();
 		echo empty($this->literalCurrentContent) ? '' : $this->literalCurrentContent;
+		unset($this->literalCurrentContent);
+		unset($this->currentContent);
 	}
 
 	public function addContent($content): Response

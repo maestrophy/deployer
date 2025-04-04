@@ -135,15 +135,18 @@ class ProjectService {
 					$projectData['scripts'],
 					fn ($script) => (
 						!is_array($script) ||
+						empty($script['command']) ||
 						empty($script['schedule']) ||
-						empty($script['targetPath']) ||
-						!PathUtil::validatePath($script['targetPath']) ||
+						(
+							empty($script['targetPath']) &&
+							!PathUtil::validatePath($script['targetPath'])
+						 ) ||
 						!in_array($script['schedule'], ['beforePull', 'afterPull'])
 					)
 				)
 			) > 0
 		) {
-			throw new \Exception('Scripts must be an array or string, ' . gettype($projectData['scripts']) . ' given!');
+			throw new \Exception('Scripts must be an array with a strict pattern! ' . var_export($projectData['scripts'], true));
 		}
 		return true;
 	}

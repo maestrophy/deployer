@@ -5,6 +5,7 @@ namespace App;
 use App\Container;
 use Services\ProjectService;
 use App\Request;
+use App\Response;
 
 class Bootstrap {
 
@@ -40,10 +41,12 @@ class Bootstrap {
 		$dispatcher = new Dispatcher($this->di);
 		$dispatcher->setHandlerPath('Handlers');
 		$request = new Request();
+		$response = new Response();
 		$this->di->set('projectService', $projectService);
 		$this->di->set('router', $router);
 		$this->di->set('dispatcher', $dispatcher);
 		$this->di->set('request', $request);
+		$this->di->set('response', $response);
 	}
 
 	public function getDi()

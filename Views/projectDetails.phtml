@@ -11,9 +11,12 @@
 						<?= '<option value="' . $branch . '" ' . ($activeBranch === $branch ? 'selected' : '') . '>' . $branch . '</option>' ?>
 					<? endforeach; ?>
 				</select>
+				<p class="errorMessage">Error placeholder</p>
 			</div>
 			<div>
 				<button id="deployBtn">Update</button>
+			</div>
+			<div id="processScreen">
 			</div>
 		</form>
 		<hr />
@@ -22,5 +25,3 @@
 		</form>
 	</section>
 </div>
-
-["  origin\/HEAD -> origin\/main","  origin\/main"]

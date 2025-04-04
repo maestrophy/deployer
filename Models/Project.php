@@ -5,8 +5,10 @@ namespace Models;
 use Services\CommandService;
 use Services\Logger;
 use Services\ProjectService;
+use App\Response;
+use Exception;
 
-class Project {
+class Project extends BaseModel {
 
 	private string $name;
 	private string $path;
@@ -26,16 +28,130 @@ class Project {
 
 	public function checkout(string $branchName)
 	{
+		/**
+		 * @var Response
+		 */
+		$response = $this->di->get('response');
 		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
-		if ($branchName === $this->activeBranch) {
-			$this->pull();
+
+		// Only pulling, staying the same branch
+		if ($branchName === $this->getActiveBranch()) {
+			$response->setContent(
+				[
+					'allScripts' => [
+						[
+							'schedule' => 'none',
+							'targetPath' => '',
+							'command' => 'pull'
+						]
+					]
+				]
+			);
+			$response->sendPartial();
+			try {
+				$this->pull();
+				$response->setContent(
+					[
+						'scriptFinished' => 'pull'
+					]
+				);
+				$response->sendPartial();
+				return true;
+			} catch (\Exception $e) {
+				$response->setContent(
+					[
+						'scriptFailed' => 'pull',
+						'errorMessage' => $e->getMessage()
+					]
+				);
+				$response->sendPartial();
+				return false;
+			}
 		}
-		CommandService::runCommandAsUserInFolder('git checkout -B branch-name origin/' . $branchName, $this->path);
+
+		// Separating scripts to execute before, and after checkout
+		$scriptsBeforePull = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'beforePull');
+		$scriptsAfterPull = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
+		$response->setContent(
+			[
+				'allScripts' => [
+					...$scriptsBeforePull,
+					[
+						'schedule' => 'none',
+						'targetPath' => '',
+						'command' => 'checkout'
+					],
+					...$scriptsAfterPull
+				]
+			]
+		);
+		$response->sendPartial();
+
+		// Executing scripts before checkout
+		foreach ($scriptsBeforePull as $script) {
+			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
+			try {
+				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
+				$response->setContent(
+					[
+						'scriptFinished' => $script['command']
+					]
+				);
+				$response->sendPartial();
+			} catch (Exception $e) {
+				$response->setContent(
+					[
+						'scriptFailed' => $script['command'],
+						'errorMessage' => $e->getMessage()
+					]
+				);
+				$response->sendPartial();
+				return false;
+			}
+		}
+
+		// Checkout
+		try {
+			CommandService::runCommandAsUserInFolder('git checkout -B branch-name origin/' . $branchName, $this->path);
+		} catch (Exception $e) {
+			$response->setContent(
+				[
+					'scriptFailed' => 'checkout',
+					'errorMessage' => $e->getMessage()
+				]
+			);
+			$response->sendPartial();
+			return false;
+		}
+
+		// Executing scripts after checkout
+		foreach ($scriptsAfterPull as $script) {
+			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
+			try {
+				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
+				$response->setContent(
+					[
+						'scriptFinished' => $script['command']
+					]
+				);
+				$response->sendPartial();
+			} catch (Exception $e) {
+				$response->setContent(
+					[
+						'scriptFailed' => $script['command'],
+						'errorMessage' => $e->getMessage()
+					]
+				);
+				$response->sendPartial();
+				return false;
+			}
+		}
+		return true;
 	}
 
 	public function pull()
 	{
-		CommandService::runCommandAsUserInFolder('git pull', $this->path);
+		return CommandService::runCommandAsUserInFolder('git pull', $this->path);
 	}
 
 	public function getProjectName(): string
