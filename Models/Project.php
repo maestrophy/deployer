@@ -53,7 +53,20 @@ class Project {
 		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
 		$branchesOutput = CommandService::runCommandAsUserInFolder('git branch -r', $this->path);
 		$this->logger->info('Branchlist', $branchesOutput);
-		return array_map(fn ($branch) => str_replace('origin/', '', $branch), $branchesOutput);
+		return array_map(
+			fn ($branch) =>
+				trim(
+					str_replace(
+						'origin/',
+						'',
+						trim($branch)
+					)
+				),
+			array_filter(
+				$branchesOutput,
+				fn ($item) => !preg_match('/origin/HEAD ->/', $item)
+			)
+		);
 	}
 
 	public function getActiveBranch(): string
