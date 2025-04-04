@@ -64,7 +64,7 @@ class Project {
 				),
 			array_filter(
 				$branchesOutput,
-				fn ($item) => !preg_match('/origin/HEAD ->/', $item)
+				fn ($item) => !preg_match('/HEAD ->/', $item)
 			)
 		);
 	}
