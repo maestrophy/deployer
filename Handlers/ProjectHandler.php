@@ -2,6 +2,7 @@
 
 namespace Handlers;
 
+use App\Container;
 use Services\Logger;
 use Services\ProjectService;
 use Views\ViewBuilder;
@@ -10,9 +11,10 @@ class ProjectHandler extends AbstractHandler {
 
 	private Logger $logger;
 
-	function __construct()
+	function __construct(Container $di)
 	{
-			$this->logger = new Logger('', __class__);
+		$this->di = $di;
+		$this->logger = new Logger('', __class__);
 	}
 
 	public function index()
