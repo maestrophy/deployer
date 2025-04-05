@@ -36,7 +36,8 @@ class ProjectHandler extends AbstractHandler {
 		$project = $projectService->getProject($projectName);
 		$viewBuilder = new ViewBuilder();
 		$viewName = 'projectDetails';
-		$viewBuilder->pickComponent($viewName);
+		$viewBuilder->pickView($viewName);
+		$viewBuilder->addScriptFile('deploy');
 		$viewBuilder->setTitle('Project Details');
 		$currentlyActiveBranch = $project->getActiveBranch();
 		$viewBuilder->addVars(
@@ -45,7 +46,7 @@ class ProjectHandler extends AbstractHandler {
 				'project' => $project,
 				'branches' => $project->getBranchList(),
 				'activeBranch' => $currentlyActiveBranch,
-				'buildScripts' => $project->getBuildScripts()
+				'buildScripts' => $project->getScriptsSeparated()
 			]
 		);
 		$viewBuilder->addJSVars(['currentlyActiveBranch' => $currentlyActiveBranch]);

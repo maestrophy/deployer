@@ -70,8 +70,9 @@ class Project extends BaseModel {
 		}
 
 		// Separating scripts to execute before, and after checkout
-		$scriptsBeforePull = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'beforePull');
-		$scriptsAfterPull = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
+		$separated = $this->getScriptsSeparated();
+		$scriptsBeforePull = $separated['before'];
+		$scriptsAfterPull = $separated['after'];
 		$response->setContent(
 			[
 				'allScripts' => [
@@ -200,5 +201,13 @@ class Project extends BaseModel {
 	public function getBuildScripts(): array
 	{
 		return $this->scripts;
+	}
+
+	public function getScriptsSeparated(): array
+	{
+		$result = [];
+		$result['before'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'beforePull');
+		$$result['after'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
+		return $result;
 	}
 }

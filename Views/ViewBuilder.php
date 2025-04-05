@@ -180,4 +180,10 @@ class ViewBuilder {
 		}
 		return $vars;
 	}
+	public function addScriptFile(string $scriptName, string $extraPath = '')
+	{
+		if (file_exists('Views/Scripts/' . $extraPath . $scriptName . '.js')) {
+			$this->scripts[$scriptName] = 'Views/Scripts/' . $extraPath . $scriptName . '.js';
+		}
+	}
 }

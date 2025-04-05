@@ -1,0 +1,20 @@
+<section>
+	<h2>Build scripts</h2>
+	<div class="scriptsContainer">
+		<? foreach ($buildScripts['before'] as $script) : ?>
+			<div data-script="<?= $script['command'] ?>">
+				<div class="positioners">
+					<button class="upper"></button>
+					<button class="lower"></button>
+				</div>
+				<div class="commandLiteral"><?= $script['command'] ?></div>
+				<div class="remover"></div>
+			</div>
+		<? endforeach; ?>
+		<? foreach ($buildScripts['after'] as $script) : ?>
+		<? endforeach; ?>
+	</div>
+	<div class="scriptPushContainer">
+		<button id="scriptPush">Add script</button>
+	</div>
+</section>
