@@ -210,4 +210,9 @@ class Project extends BaseModel {
 		$$result['after'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
 		return $result;
 	}
+
+	public function getProjectPath(): string
+	{
+		return $this->path;
+	}
 }

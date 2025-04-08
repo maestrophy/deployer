@@ -1,17 +1,50 @@
-<section>
+<section class="formSection">
 	<h2>Build scripts</h2>
 	<div class="scriptsContainer">
 		<? foreach ($buildScripts['before'] as $script) : ?>
-			<div data-script="<?= $script['command'] ?>">
+			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
 				<div class="positioners">
-					<button class="upper"></button>
-					<button class="lower"></button>
+					<button class="upper">
+						<img src="/Views/Assets/arrowUp.svg" />
+					</button>
+					<button class="lower">
+						<img src="/Views/Assets/arrowDown.svg" />
+					</button>
 				</div>
-				<div class="commandLiteral"><?= $script['command'] ?></div>
-				<div class="remover"></div>
+				<div class="literalContainer">
+					<p class="commandLiteral"><?= $script['command'] ?></p>
+					<p class="targetPath"><?= $script['targetPath'] ?></p>
+				</div>
+				<div class="removerContainer">
+					<button class="removeBtn"></button>
+				</div>
 			</div>
 		<? endforeach; ?>
+		<div class="scriptHolder checkout" data-script="<?= $script['command'] ?>">
+			<div class="positioners">
+			</div>
+			<div class="commandLiteral">git pull</div>
+		</div>
 		<? foreach ($buildScripts['after'] as $script) : ?>
+			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
+				<div class="positioners">
+					<button class="upper">
+						<img src="/Views/Assets/arrowUp.svg" />
+					</button>
+					<button class="lower">
+						<img src="/Views/Assets/arrowDown.svg" />
+					</button>
+				</div>
+				<div class="literalContainer">
+					<p class="commandLiteral"><?= $script['command'] ?></p>
+					<p class="targetPath"><?= $script['targetPath'] ?></p>
+				</div>
+				<div class="actionButtonsContainer">
+					<button class="editCommandBtn"></button>
+					<button class="editPathBtn"></button>
+					<button class="removeBtn"></button>
+				</div>
+			</div>
 		<? endforeach; ?>
 	</div>
 	<div class="scriptPushContainer">

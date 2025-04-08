@@ -51,7 +51,12 @@ class ProjectHandler extends AbstractHandler {
 				'buildScripts' => $project->getScriptsSeparated()
 			]
 		);
-		$viewBuilder->addJSVars(['currentlyActiveBranch' => $currentlyActiveBranch]);
+		$viewBuilder->addJSVars(
+			[
+				'currentlyActiveBranch' => $currentlyActiveBranch,
+				'currentProjectPath' => $project->getProjectPath()
+			]
+		);
 		$viewBuilder->render();
 	}
 
