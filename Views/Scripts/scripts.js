@@ -1,5 +1,5 @@
 window.app.afterInit(function () {
-	const addScriptBtn = document.querySelector('#scriptPush');
+	const addScriptBtn = document.querySelector('button#scriptPush');
 	addScriptBtn.addEventListener('click', function (event) {
 		event.preventDefault();
 		const scriptListContainer = document.querySelector('div.scriptsContainer');

@@ -40,6 +40,7 @@ class ProjectHandler extends AbstractHandler {
 		$viewName = 'projectDetails';
 		$viewBuilder->pickView($viewName);
 		$viewBuilder->addScriptFile('deploy');
+		$viewBuilder->addScriptFile('scripts');
 		$viewBuilder->setTitle('Project Details');
 		$currentlyActiveBranch = $project->getActiveBranch();
 		$viewBuilder->addVars(
