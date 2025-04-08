@@ -38,7 +38,7 @@ class ProjectHandler extends AbstractHandler {
 		$project = $projectService->getProject($projectName);
 		$viewBuilder = new ViewBuilder();
 		$viewName = 'projectDetails';
-		$viewBuilder->pickView($viewName);
+		$viewBuilder->pickComponent($viewName);
 		$viewBuilder->addScriptFile('deploy');
 		$viewBuilder->addScriptFile('scripts');
 		$viewBuilder->setTitle('Project Details');
