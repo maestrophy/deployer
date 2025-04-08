@@ -207,7 +207,7 @@ class Project extends BaseModel {
 	{
 		$result = [];
 		$result['before'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'beforePull');
-		$$result['after'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
+		$result['after'] = array_filter($this->scripts, fn ($script) => $script['schedule'] === 'afterPull');
 		return $result;
 	}
 

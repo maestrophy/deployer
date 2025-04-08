@@ -1,8 +1,8 @@
 <section class="formSection">
 	<h2>Build scripts</h2>
 	<div class="scriptsContainer">
-		<? foreach ($buildScripts['before'] as $script) : ?>
-			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
+		<?php foreach ($buildScripts['before'] as $script) { ?>
+			<div class="scriptHolder" data-script="<?php echo $script['command']; ?>">
 				<div class="positioners">
 					<button class="upper">
 						<img src="/Views/Assets/arrowUp.svg" />
@@ -12,21 +12,21 @@
 					</button>
 				</div>
 				<div class="literalContainer">
-					<p class="commandLiteral"><?= $script['command'] ?></p>
-					<p class="targetPath"><?= $script['targetPath'] ?></p>
+					<p class="commandLiteral"><?php echo $script['command']; ?></p>
+					<p class="targetPath"><?php echo $script['targetPath']; ?></p>
 				</div>
 				<div class="removerContainer">
 					<button class="removeBtn"></button>
 				</div>
 			</div>
-		<? endforeach; ?>
-		<div class="scriptHolder checkout" data-script="<?= $script['command'] ?>">
+		<?php } ?>
+		<div class="scriptHolder checkout" data-script="<?php echo $script['command']; ?>">
 			<div class="positioners">
 			</div>
 			<div class="commandLiteral">git pull</div>
 		</div>
-		<? foreach ($buildScripts['after'] as $script) : ?>
-			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
+		<?php foreach ($buildScripts['after'] as $script) { ?>
+			<div class="scriptHolder" data-script="<?php echo $script['command']; ?>">
 				<div class="positioners">
 					<button class="upper">
 						<img src="/Views/Assets/arrowUp.svg" />
@@ -36,8 +36,8 @@
 					</button>
 				</div>
 				<div class="literalContainer">
-					<p class="commandLiteral"><?= $script['command'] ?></p>
-					<p class="targetPath"><?= $script['targetPath'] ?></p>
+					<p class="commandLiteral"><?php echo $script['command']; ?></p>
+					<p class="targetPath"><?php echo $script['targetPath']; ?></p>
 				</div>
 				<div class="actionButtonsContainer">
 					<button class="editCommandBtn"></button>
@@ -45,7 +45,7 @@
 					<button class="removeBtn"></button>
 				</div>
 			</div>
-		<? endforeach; ?>
+		<?php } ?>
 	</div>
 	<div class="scriptPushContainer">
 		<button id="scriptPush">Add script</button>
