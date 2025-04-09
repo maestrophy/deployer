@@ -14,12 +14,14 @@ function addNewScript(container) {
 	// Creating elements
 	const newScriptDiv = document.createElement('div');
 	const positionerDiv = document.createElement('div');
+	const upperBtnContainer = document.createElement('span');
 	const upperBtn = document.createElement('button');
+	const lowerBtnContainer = document.createElement('span');
 	const lowerBtn = document.createElement('button');
 	const upperArrow = document.createElement('img');
 	const lowerArrow = document.createElement('img');
 	const literalContainer = document.createElement('div');
-	const commandLiteral = document.createElement('p');
+	const commandInput = document.createElement('p');
 	const targetPath = document.createElement('p');
 	const actionButtonsContainer = document.createElement('div');
 	const editCommandBtn = document.createElement('button');
@@ -29,12 +31,15 @@ function addNewScript(container) {
 	// Adding classes and attributes
 	newScriptDiv.classList.add('scriptHolder');
 	positionerDiv.classList.add('positioners');
+	upperBtnContainer.classList.add('ilb');
 	upperBtn.classList.add('upper');
 	upperArrow.src = '/Views/Assets/arrowUp.svg';
+	lowerBtnContainer.classList.add('ilb');
 	lowerBtn.classList.add('lower');
 	lowerArrow.src = '/Views/Assets/arrowDown.svg';
 	literalContainer.classList.add('literalContainer');
-	commandLiteral.classList.add('commandLiteral');
+	commandInput.classList.add('commandInput', 'translucentInput');
+	commandInput.addEventListener('blur', onCommandInputBlur);
 	targetPath.classList.add('targetPath');
 	targetPath.innerHTML = currentProjectPath ?? '/';
 	actionButtonsContainer.classList.add('actionButtonsContainer');
@@ -46,10 +51,13 @@ function addNewScript(container) {
 	upperBtn.appendChild(upperArrow);
 	lowerBtn.appendChild(lowerArrow);
 
-	positionerDiv.appendChild(upperBtn);
-	positionerDiv.appendChild(lowerBtn);
+	upperBtnContainer.appendChild(upperBtn);
+	lowerBtnContainer.appendChild(lowerBtn);
 
-	literalContainer.appendChild(commandLiteral);
+	positionerDiv.appendChild(upperBtnContainer);
+	positionerDiv.appendChild(lowerBtnContainer);
+
+	literalContainer.appendChild(commandInput);
 	literalContainer.appendChild(targetPath);
 
 	actionButtonsContainer.appendChild(editCommandBtn);
@@ -61,6 +69,7 @@ function addNewScript(container) {
 	newScriptDiv.appendChild(actionButtonsContainer);
 
 	container.appendChild(newScriptDiv);
+	commandInput.focus();
 }
 
 function getScripts() {

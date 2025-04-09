@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" stroke="black" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Main pencil body -->
+  <path d="M15 3L21 9L8 22L3 23L4 18L17 5Z" />
+
+  <!-- Simulated pentagonal shaft facet -->
+  <path d="M19.5 7.5L9.5 107.5" stroke="black" stroke-width="1.6" />
+</svg>

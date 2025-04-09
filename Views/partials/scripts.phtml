@@ -1,51 +1,61 @@
 <section class="formSection">
 	<h2>Build scripts</h2>
 	<div class="scriptsContainer">
-		<?php foreach ($buildScripts['before'] as $script) { ?>
-			<div class="scriptHolder" data-script="<?php echo $script['command']; ?>">
+		<? foreach ($buildScripts['before'] as $script) : ?>
+			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
 				<div class="positioners">
-					<button class="upper">
-						<img src="/Views/Assets/arrowUp.svg" />
-					</button>
-					<button class="lower">
-						<img src="/Views/Assets/arrowDown.svg" />
-					</button>
+					<span class="ilb">
+						<button class="upper">
+							<img src="/Views/Assets/arrowUp.svg" />
+						</button>
+					</span>
+					<span class="ilb">
+						<button class="lower">
+							<img src="/Views/Assets/arrowDown.svg" />
+						</button>
+					</span>
 				</div>
 				<div class="literalContainer">
-					<p class="commandLiteral"><?php echo $script['command']; ?></p>
-					<p class="targetPath"><?php echo $script['targetPath']; ?></p>
+					<p class="commandLiteral"><?= $script['command'] ?></p>
+					<p class="targetPath"><?= $script['targetPath'] ?></p>
 				</div>
 				<div class="removerContainer">
 					<button class="removeBtn"></button>
 				</div>
 			</div>
-		<?php } ?>
+		<? endforeach; ?>
 		<div class="scriptHolder checkout" data-script="checkout">
 			<div class="positioners">
 			</div>
 			<div class="commandLiteral">git pull</div>
 		</div>
-		<?php foreach ($buildScripts['after'] as $script) { ?>
-			<div class="scriptHolder" data-script="<?php echo $script['command']; ?>">
+		<? foreach ($buildScripts['after'] as $script) : ?>
+			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
 				<div class="positioners">
-					<button class="upper">
-						<img src="/Views/Assets/arrowUp.svg" />
-					</button>
-					<button class="lower">
-						<img src="/Views/Assets/arrowDown.svg" />
-					</button>
+					<span class="ilb">
+						<button class="upper">
+							<img src="/Views/Assets/arrowUp.svg" />
+						</button>
+					</span>
+					<span class="ilb">
+						<button class="lower">
+							<img src="/Views/Assets/arrowDown.svg" />
+						</button>
+					</span>
 				</div>
 				<div class="literalContainer">
-					<p class="commandLiteral"><?php echo $script['command']; ?></p>
-					<p class="targetPath"><?php echo $script['targetPath']; ?></p>
+					<p class="commandLiteral"><?= $script['command'] ?></p>
+					<p class="targetPath"><?= $script['targetPath'] ?></p>
 				</div>
 				<div class="actionButtonsContainer">
 					<button class="editCommandBtn"></button>
 					<button class="editPathBtn"></button>
-					<button class="removeBtn"></button>
+					<button class="removeBtn">
+						<img src="/Views/Assets/trashBin.svg" />
+					</button>
 				</div>
 			</div>
-		<?php } ?>
+		<? endforeach; ?>
 	</div>
 	<div class="scriptPushContainer">
 		<button class="main" id="scriptPush">Add script</button>

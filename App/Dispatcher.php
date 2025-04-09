@@ -43,7 +43,14 @@ class Dispatcher {
 			throw new \Exception("Dispatcher is not initialized yet!");
 		}
 		$action = $this->action;
-		$this->result = $this->handler->$action(...$this->urlParams);
+		$result = $this->handler->$action(...$this->urlParams);
+		if (
+			!empty($result) &&
+			gettype($result) === 'object' &&
+			get_class($result) === "App\\Response"
+		) {
+			$this->result = $result;
+		}
 	}
 
 	public function getResult(): Response | null
