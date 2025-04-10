@@ -21,31 +21,45 @@ function addNewScript(container) {
 	const upperArrow = document.createElement('img');
 	const lowerArrow = document.createElement('img');
 	const literalContainer = document.createElement('div');
-	const commandInput = document.createElement('p');
+	const commandInput = document.createElement('input');
 	const targetPath = document.createElement('p');
 	const actionButtonsContainer = document.createElement('div');
 	const editCommandBtn = document.createElement('button');
+	const editCommandSymbol = document.createElement('img');
 	const editPathBtn = document.createElement('button');
+	const editPathSymbol = document.createElement('img');
 	const removeBtn = document.createElement('button');
+	const binSymbol = document.createElement('img');
 
 	// Adding classes and attributes
 	newScriptDiv.classList.add('scriptHolder');
 	positionerDiv.classList.add('positioners');
 	upperBtnContainer.classList.add('ilb');
 	upperBtn.classList.add('upper');
+	upperBtn.disabled = true;
 	upperArrow.src = '/Views/Assets/arrowUp.svg';
 	lowerBtnContainer.classList.add('ilb');
 	lowerBtn.classList.add('lower');
+	lowerBtn.disabled = true;
 	lowerArrow.src = '/Views/Assets/arrowDown.svg';
 	literalContainer.classList.add('literalContainer');
 	commandInput.classList.add('commandInput', 'translucentInput');
+	commandInput.type = 'text';
+	commandInput.id = 'commandInput';
+	commandInput.name = 'commandInput';
 	commandInput.addEventListener('blur', onCommandInputBlur);
 	targetPath.classList.add('targetPath');
 	targetPath.innerHTML = currentProjectPath ?? '/';
 	actionButtonsContainer.classList.add('actionButtonsContainer');
 	editCommandBtn.classList.add('editCommandBtn');
+	editCommandBtn.disabled = true;
+	editCommandSymbol.src = "/Views/Assets/command.svg";
 	editPathBtn.classList.add('editPathBtn');
+	editPathBtn.disabled = true;
+	editPathSymbol.src = "/Views/Assets/openedBlotter.svg";
 	removeBtn.classList.add('removeBtn');
+	removeBtn.disabled = true;
+	binSymbol.src = "/Views/Assets/trashBin.svg";
 
 	// Build
 	upperBtn.appendChild(upperArrow);
@@ -59,6 +73,10 @@ function addNewScript(container) {
 
 	literalContainer.appendChild(commandInput);
 	literalContainer.appendChild(targetPath);
+
+	editCommandBtn.appendChild(editCommandSymbol);
+	editPathBtn.appendChild(editPathSymbol);
+	removeBtn.appendChild(binSymbol);
 
 	actionButtonsContainer.appendChild(editCommandBtn);
 	actionButtonsContainer.appendChild(editPathBtn);

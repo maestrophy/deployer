@@ -4,12 +4,12 @@
 		<? foreach ($buildScripts['before'] as $script) : ?>
 			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
 				<div class="positioners">
-					<span class="ilb">
+					<span class="ilb btn-container">
 						<button class="upper">
 							<img src="/Views/Assets/arrowUp.svg" />
 						</button>
 					</span>
-					<span class="ilb">
+					<span class="ilb btn-container">
 						<button class="lower">
 							<img src="/Views/Assets/arrowDown.svg" />
 						</button>
@@ -32,12 +32,12 @@
 		<? foreach ($buildScripts['after'] as $script) : ?>
 			<div class="scriptHolder" data-script="<?= $script['command'] ?>">
 				<div class="positioners">
-					<span class="ilb">
+					<span class="ilb btn-container">
 						<button class="upper">
 							<img src="/Views/Assets/arrowUp.svg" />
 						</button>
 					</span>
-					<span class="ilb">
+					<span class="ilb btn-container">
 						<button class="lower">
 							<img src="/Views/Assets/arrowDown.svg" />
 						</button>
@@ -48,8 +48,12 @@
 					<p class="targetPath"><?= $script['targetPath'] ?></p>
 				</div>
 				<div class="actionButtonsContainer">
-					<button class="editCommandBtn"></button>
-					<button class="editPathBtn"></button>
+					<button class="editCommandBtn">
+						<img src="/Views/Assets/command.svg" />
+					</button>
+					<button class="editPathBtn">
+						<img src="/Views/Assets/openedBlotter.svg" />
+					</button>
 					<button class="removeBtn">
 						<img src="/Views/Assets/trashBin.svg" />
 					</button>

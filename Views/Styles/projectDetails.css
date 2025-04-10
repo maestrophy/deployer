@@ -2,7 +2,7 @@ div.scriptsContainer {
 	overflow-y: scroll;
 	height: 40vh;
 	min-height: 300px;
-	width: 60vw;
+	margin: 0px 30px;
 	min-width: 500px;
 	border: 2px inset rgb(118, 118, 118);
 	box-shadow: inset 0 0 10px rgb(150, 150, 150);
@@ -12,16 +12,20 @@ div.scriptsContainer {
 }
 
 div.scriptsContainer div.scriptHolder {
+	text-align: left;
 	border: 2px dotted rgb(220, 220, 220);
 	height: 50px;
 	font-size: 16px;
+	display: flex;
+	align-items: center;
+	background-image: radial-gradient(rgb(220, 220, 220), rgb(240, 240, 240));
 }
 
 div.scriptsContainer div.scriptHolder div.positioners {
 	width: 100px;
 	min-width: 100px;
 	max-width: 100px;
-	display: inline-block;
+	display: inline-flex;
 }
 
 div.scriptsContainer
@@ -42,6 +46,10 @@ div.scriptsContainer
 div.scriptHolder
 div.positioners
 span.ilb.btn-container
+button,
+div.scriptsContainer
+div.scriptHolder
+div.actionButtonsContainer
 button {
 	position: relative;
 	background: radial-gradient(circle, rgb(250, 250, 250), rgb(240, 240, 240));
@@ -59,6 +67,10 @@ div.scriptsContainer
 div.scriptHolder
 div.positioners
 span.ilb.btn-container
+button:not(:disabled):active,
+div.scriptsContainer
+div.scriptHolder
+div.actionButtonsContainer
 button:not(:disabled):active {
 	background: radial-gradient(circle, rgb(250, 250, 250), rgb(240, 240, 240));
 	top: 1px;
@@ -69,6 +81,10 @@ div.scriptsContainer
 div.scriptHolder
 div.positioners
 span.ilb.btn-container
+button:disabled,
+div.scriptsContainer
+div.scriptHolder
+div.actionButtonsContainer
 button:disabled {
 	background: radial-gradient(circle, rgb(220, 220, 220), rgb(210, 210, 210));
 	color: rgb(180, 180, 180);
@@ -85,16 +101,22 @@ img {
 }
 
 div.literalContainer {
-	display: inline-block;
+	display: inline-flex;
+	width: 75%;
 }
 
 div.literalContainer p {
 	margin: 0px;
 	padding: 5px;
+	overflow-x: scroll;
 }
 
 input.translucentInput {
 	background: none;
 	border: none;
 	padding: 5px;
+}
+
+div.actionButtonsContainer {
+	display: inline-flex;
 }
