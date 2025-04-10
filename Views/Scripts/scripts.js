@@ -34,11 +34,11 @@ function addNewScript(container) {
 	// Adding classes and attributes
 	newScriptDiv.classList.add('scriptHolder');
 	positionerDiv.classList.add('positioners');
-	upperBtnContainer.classList.add('ilb');
+	upperBtnContainer.classList.add('ilb', 'btn-container');
 	upperBtn.classList.add('upper');
 	upperBtn.disabled = true;
 	upperArrow.src = '/Views/Assets/arrowUp.svg';
-	lowerBtnContainer.classList.add('ilb');
+	lowerBtnContainer.classList.add('ilb', 'btn-container');
 	lowerBtn.classList.add('lower');
 	lowerBtn.disabled = true;
 	lowerArrow.src = '/Views/Assets/arrowDown.svg';
@@ -136,7 +136,7 @@ function editScript(event) {
 		commandInput.value = currentCommandValue;
 		commandInput.addEventListener('blur', onCommandInputBlur);
 		commandContainer.remove();
-		literalContainer.prependChild(commandInput);
+		literalContainer.prepend(commandInput);
 		commandInput.focus();
 	} else {
 		console.error('Element with class literalContainer not found as button container sibling!');
@@ -160,7 +160,7 @@ function onCommandInputBlur(event) {
 		commandDisplay.classList.add('commandLiteral');
 		commandDisplay.innerHTML = currentCommand;
 		commandInput.remove();
-		literalContainer.prependChild(commandDisplay);
+		literalContainer.prepend(commandDisplay);
 	} else {
 		console.warn('Command editing failed, command paragraph was already present with input!');
 	}

@@ -18,7 +18,18 @@ div.scriptsContainer div.scriptHolder {
 	font-size: 16px;
 	display: flex;
 	align-items: center;
-	background-image: radial-gradient(rgb(220, 220, 220), rgb(240, 240, 240));
+}
+
+div.scriptsContainer div.scriptHolder:nth-child(odd) {
+	background-image: radial-gradient(rgb(230, 230, 230), rgb(240, 240, 240));
+}
+
+div.scriptsContainer div.scriptHolder:nth-child(even) {
+	background-image: radial-gradient(rgb(210, 210, 240), rgb(240, 240, 240));
+}
+
+div.scriptsContainer div.scriptHolder.checkout {
+	background-image: radial-gradient(rgb(240, 240, 210), rgb(240, 240, 240));
 }
 
 div.scriptsContainer div.scriptHolder div.positioners {

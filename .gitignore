@@ -3,3 +3,4 @@ config.php
 nginx.conf
 Storage/*
 Logs
+.vscode*
