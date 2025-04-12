@@ -241,19 +241,11 @@ function removeFromList(element) {
 	let scriptRow, parentElement;
 	if (
 		element.classList.contains('scriptHolder') &&
-		parentElement.tagName === 'div'
+		element.tagName === 'div'
 	) {
 		scriptRow = element;
 	} else {
-		while (!scriptRow && element !== document) {
-			element = element.parentElement;
-			if (
-				element.classList.contains('scriptHolder') &&
-				element.tagName === 'div'
-			) {
-				scriptRow = parentElement;
-			}
-		}
+		scriptRow = element.closest('div.scriptHolder')
 	}
 	if (!scriptRow) {
 		return;
