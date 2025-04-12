@@ -7,6 +7,16 @@ window.app.afterInit(function () {
 			addNewScript(scriptListContainer);
 		}
 	});
+	const upperButtons = document.querySelectorAll('div.positioners span.btn-container button.upper');
+	upperButtons.addEventListener('click', );
+	const lowerButtons = document.querySelectorAll('div.positioners span.btn-container button.lower');
+	lowerButtons.addEventListener('click', );
+	const editCommandButtons = document.querySelectorAll('div.actionButtonsContainer button.editCommandBtn');
+	editCommandButtons.addEventListener('click', editScript);
+	const editPathButtons = document.querySelectorAll('div.actionButtonsContainer button.editPathBtn');
+	editPathButtons.addEventListener('click', editPath);
+	const removeButtons = document.querySelectorAll('div.actionButtonsContainer button.removeBtn');
+	removeButtons.addEventListener('click', removeFromList);
 });
 
 function addNewScript(container) {
@@ -213,11 +223,11 @@ function onPathInputBlur(event) {
 }
 
 function setButtonsDisabled(literalContainer, lever) {
-	let buttonContainer = literalContainer.nextElementSibling;
-	if (!buttonContainer) {
+	let scriptLine = literalContainer.parentElement;
+	if (!scriptLine) {
 		return;
 	}
-	let buttons = Array.from(buttonContainer.querySelectorAll('button'));
+	let buttons = Array.from(scriptLine.querySelectorAll('button'));
 	if (buttons && buttons.length) {
 		buttons.forEach(btn => btn.disabled = lever);
 	}
@@ -229,17 +239,95 @@ function setButtonsDisabled(literalContainer, lever) {
 
 function removeFromList(element) {
 	let scriptRow, parentElement;
-	while (!scriptRow && parentElement !== document) {
-		parentElement = element.parentElement;
-		if (
-			parentElement.classList.contains('scriptHolder') &&
-			parentElement.tagName === 'div'
-		) {
-			scriptRow = parentElement;
+	if (
+		element.classList.contains('scriptHolder') &&
+		parentElement.tagName === 'div'
+	) {
+		scriptRow = element;
+	} else {
+		while (!scriptRow && element !== document) {
+			element = element.parentElement;
+			if (
+				element.classList.contains('scriptHolder') &&
+				element.tagName === 'div'
+			) {
+				scriptRow = parentElement;
+			}
 		}
 	}
 	if (!scriptRow) {
 		return;
 	}
 	scriptRow.remove();
+}
+
+function moveScriptUpper(event) {
+	const moveButton = event.target;
+	const scriptRecord = moveButton.closest('div.scriptHolder');
+	const scriptRecordAbove = scriptRecord.previousElementSibling;
+	const listContainer = scriptRecord.parentElement;
+
+	if (!scriptRecordAbove) {
+		return;
+	}
+	if (scriptRecordAbove.tagName !== 'div') {
+		console.error('The script container is not the correct html element!');
+		return;
+	}
+	if (!scriptRecordAbove.classList.contains('scriptHolder')) {
+		console.error('The script container is not the correct html element!');
+		return;
+	}
+	if (!listContainer) {
+		console.error('There is no list container!');
+		return;
+	}
+	listContainer.insertBefore(scriptRecord, scriptRecordAbove);
+}
+
+function moveScriptLower(event) {
+	const moveButton = event.target;
+	const scriptRecord = moveButton.closest('div.scriptHolder');
+	const scriptRecordBelow = scriptRecord.nextElementSibling;
+	const listContainer = scriptRecord.parentElement;
+
+	if (!scriptRecordBelow) {
+		return;
+	}
+	if (scriptRecordBelow.tagName !== 'div') {
+		console.error('The script container is not the correct html element!');
+		return;
+	}
+	if (!scriptRecordBelow.classList.contains('scriptHolder')) {
+		console.error('The script container is not the correct html element!');
+		return;
+	}
+	if (!listContainer) {
+		console.error('There is no list container!');
+		return;
+	}
+	listContainer.insertAfter(scriptRecord, scriptRecordBelow);
+}
+
+function enableDisableMoveButtonsByRecordPosition(element) {
+	if (element.tagName !== 'div' || !element.classList.contains('scriptHolder')) {
+		const scriptRecord = element.closest('div.scriptHolder');
+	} else {
+		const scriptRecord = element;
+	}
+
+	const upperBtn = scriptRecord.querySelector('button.upper');
+	const lowerBtn = scriptRecord.querySelector('button.lower');
+
+	if (!scriptRecord.nextElementSibling) {
+		lowerBtn.disabled = true;
+	} else {
+		lowerBtn.disabled = false;
+	}
+
+	if (!scriptRecord.previousElementSibling) {
+		upperBtn.disabled = true;
+	} else {
+		upperBtn.disabled = false;
+	}
 }

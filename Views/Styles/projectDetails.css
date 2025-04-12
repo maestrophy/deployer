@@ -25,11 +25,11 @@ div.scriptsContainer div.scriptHolder:nth-child(odd) {
 }
 
 div.scriptsContainer div.scriptHolder:nth-child(even) {
-	background-image: radial-gradient(rgb(210, 210, 240), rgb(240, 240, 240));
+	background-image: radial-gradient(rgb(220, 220, 240), rgb(230, 230, 250));
 }
 
 div.scriptsContainer div.scriptHolder.checkout {
-	background-image: radial-gradient(rgb(240, 240, 210), rgb(240, 240, 240));
+	background-image: radial-gradient(rgb(240, 240, 220), rgb(250, 250, 230));
 }
 
 div.scriptsContainer div.scriptHolder div.positioners {
@@ -112,7 +112,7 @@ img {
 }
 
 div.literalContainer {
-	display: inline-flex;
+	display: inline-block;
 	width: 75%;
 }
 
