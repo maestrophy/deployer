@@ -260,7 +260,7 @@ function removeFromList(element) {
 	let scriptRow, parentElement;
 	if (
 		element.classList.contains('scriptHolder') &&
-		element.tagName === 'div'
+		element.tagName === 'DIV'
 	) {
 		scriptRow = element;
 	} else {
@@ -281,7 +281,7 @@ function moveScriptUpper(event) {
 	if (!scriptRecordAbove) {
 		return;
 	}
-	if (scriptRecordAbove.tagName !== 'div') {
+	if (scriptRecordAbove.tagName !== 'DIV') {
 		console.error('The script container is not the correct html element!');
 		return;
 	}
@@ -306,7 +306,7 @@ function moveScriptLower(event) {
 	if (!scriptRecordBelow) {
 		return;
 	}
-	if (scriptRecordBelow.tagName !== 'div') {
+	if (scriptRecordBelow.tagName !== 'DIV') {
 		console.error('The script container is not the correct html element!');
 		return;
 	}
@@ -323,7 +323,7 @@ function moveScriptLower(event) {
 }
 
 function enableDisableMoveButtonsByRecordPosition(element) {
-	if (element.tagName !== 'div' || !element.classList.contains('scriptHolder')) {
+	if (element.tagName !== 'DIV' || !element.classList.contains('scriptHolder')) {
 		const scriptRecord = element.closest('div.scriptHolder');
 	} else {
 		const scriptRecord = element;
