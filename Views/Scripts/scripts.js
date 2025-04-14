@@ -8,9 +8,9 @@ window.app.afterInit(function () {
 		}
 	});
 	const upperButtons = document.querySelectorAll('div.positioners span.btn-container button.upper');
-	upperButtons.addEventListener('click', );
+	upperButtons.addEventListener('click', moveScriptUpper);
 	const lowerButtons = document.querySelectorAll('div.positioners span.btn-container button.lower');
-	lowerButtons.addEventListener('click', );
+	lowerButtons.addEventListener('click', moveScriptLower);
 	const editCommandButtons = document.querySelectorAll('div.actionButtonsContainer button.editCommandBtn');
 	editCommandButtons.addEventListener('click', editScript);
 	const editPathButtons = document.querySelectorAll('div.actionButtonsContainer button.editPathBtn');
@@ -275,6 +275,7 @@ function moveScriptUpper(event) {
 		return;
 	}
 	listContainer.insertBefore(scriptRecord, scriptRecordAbove);
+	[scriptRecord, scriptRecordAbove].forEach(enableDisableMoveButtonsByRecordPosition);
 }
 
 function moveScriptLower(event) {
@@ -299,6 +300,7 @@ function moveScriptLower(event) {
 		return;
 	}
 	listContainer.insertAfter(scriptRecord, scriptRecordBelow);
+	[scriptRecord, scriptRecordBelow].forEach(enableDisableMoveButtonsByRecordPosition);
 }
 
 function enableDisableMoveButtonsByRecordPosition(element) {
