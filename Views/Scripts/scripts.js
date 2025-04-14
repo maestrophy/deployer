@@ -435,6 +435,7 @@ function addSaveScriptsButton() {
 	const saveButton = document.createElement('button');
 	saveButton.id = 'saveScripts';
 	saveButton.addEventListener('click', saveScripts);
+	saveButton.innerHTML = 'Save changes';
 	saveButtonContainer = document.createElement('div');
 	saveButtonContainer.appendChild(saveButton);
 	section.appendChild(saveButtonContainer);
