@@ -150,7 +150,7 @@ function getScripts() {
 
 function editScript(event) {
 	let buttonContainer = event.target.parentElement;
-	let literalContainer = buttonContainer.previousElementSibling;
+	let literalContainer = buttonContainer.nextElementSibling;
 	if (literalContainer && literalContainer.classList.contains('literalContainer')) {
 		setButtonsDisabled(literalContainer, true);
 		let commandContainer = [...literalContainer.children].find(el => el.classList.contains('commandLiteral'));
