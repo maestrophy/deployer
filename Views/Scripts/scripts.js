@@ -7,25 +7,25 @@ window.app.afterInit(function () {
 			addNewScript(scriptListContainer);
 		}
 	});
-	const upperButtons = document.querySelectorAll('div.positioners span.btn-container button.upper');
-	if (upperButtons) {
-		upperButtons.addEventListener('click', moveScriptUpper);
+	const upperButtons = Array.from(document.querySelectorAll('div.positioners span.btn-container button.upper'));
+	if (upperButtons && upperButtons.length) {
+		upperButtons.forEach(btn => btn.addEventListener('click', moveScriptUpper));
 	}
-	const lowerButtons = document.querySelectorAll('div.positioners span.btn-container button.lower');
-	if (lowerButtons) {
-		lowerButtons.addEventListener('click', moveScriptLower);
+	const lowerButtons = Array.from(document.querySelectorAll('div.positioners span.btn-container button.lower'));
+	if (lowerButtons && lowerButtons.length) {
+		lowerButtons.forEach(btn => btn.addEventListener('click', moveScriptLower));
 	}
-	const editCommandButtons = document.querySelectorAll('div.actionButtonsContainer button.editCommandBtn');
-	if (editCommandButtons) {
-		editCommandButtons.addEventListener('click', editScript);
+	const editCommandButtons = Array.from(document.querySelectorAll('div.actionButtonsContainer button.editCommandBtn'));
+	if (editCommandButtons && editCommandButtons.length) {
+		editCommandButtons.forEach(btn => btn.addEventListener('click', editScript));
 	}
-	const editPathButtons = document.querySelectorAll('div.actionButtonsContainer button.editPathBtn');
-	if (editPathButtons) {
-		editPathButtons.addEventListener('click', editPath);
+	const editPathButtons = Array.from(document.querySelectorAll('div.actionButtonsContainer button.editPathBtn'));
+	if (editPathButtons && editPathButtons.length) {
+		editPathButtons.forEach(btn => btn.addEventListener('click', editPath));
 	}
-	const removeButtons = document.querySelectorAll('div.actionButtonsContainer button.removeBtn');
-	if (removeButtons) {
-		removeButtons.addEventListener('click', removeFromList);
+	const removeButtons = Array.from(document.querySelectorAll('div.actionButtonsContainer button.removeBtn'));
+	if (removeButtons && removeButtons.length) {
+		removeButtons.forEach(btn => btn.addEventListener('click', removeFromList));
 	}
 });
 
