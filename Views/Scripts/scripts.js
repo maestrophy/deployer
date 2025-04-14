@@ -25,7 +25,7 @@ window.app.afterInit(function () {
 	}
 	const removeButtons = Array.from(document.querySelectorAll('div.actionButtonsContainer button.removeBtn'));
 	if (removeButtons && removeButtons.length) {
-		removeButtons.forEach(btn => btn.addEventListener('click', removeFromList));
+		removeButtons.forEach(btn => btn.addEventListener('click', (event) => removeFromList(event.target)));
 	}
 	const scriptRecords = Array.from(document.querySelectorAll('div.scriptHolder'));
 	if (scriptRecords && scriptRecords.length) {
@@ -96,7 +96,7 @@ function addNewScript(container) {
 	lowerBtn.addEventListener('click', moveScriptLower);
 	editCommandBtn.addEventListener('click', editScript);
 	editPathBtn.addEventListener('click', editPath);
-	removeBtn.addEventListener('click', removeFromList);
+	removeBtn.addEventListener('click', (event) => removeFromList(event.target));
 
 
 	// Build
@@ -158,8 +158,8 @@ function getScripts() {
 }
 
 function editScript(event) {
-	let buttonContainer = event.target.parentElement;
-	let literalContainer = buttonContainer.nextElementSibling;
+	let buttonContainer = event.target.closest('div.actionButtonsContainer');
+	let literalContainer = buttonContainer.previousElementSibling;
 	if (literalContainer && literalContainer.classList.contains('literalContainer')) {
 		setButtonsDisabled(literalContainer, true);
 		let commandContainer = [...literalContainer.children].find(el => el.classList.contains('commandLiteral'));
@@ -193,6 +193,7 @@ function onCommandInputBlur(event) {
 		return;
 	}
 	setButtonsDisabled(literalContainer, false);
+	enableDisableMoveButtonsByRecordPosition(literalContainer);
 	if (!literalContainer.querySelector('p.commandLiteral')) {
 		let commandDisplay = document.createElement('p');
 		commandDisplay.classList.add('commandLiteral');
@@ -205,7 +206,7 @@ function onCommandInputBlur(event) {
 }
 
 function editPath(event) {
-	let buttonContainer = event.target.parentElement;
+	let buttonContainer = event.target.closest('div.actionButtonsContainer');
 	let literalContainer = buttonContainer.previousElementSibling;
 	if (literalContainer && literalContainer.classList.contains('literalContainer')) {
 		setButtonsDisabled(literalContainer, true);
@@ -239,6 +240,7 @@ function onPathInputBlur(event) {
 		return;
 	}
 	setButtonsDisabled(literalContainer, false);
+	enableDisableMoveButtonsByRecordPosition(literalContainer);
 	if (!literalContainer.querySelector('p.targetPath')) {
 		let targetPathDisplay = document.createElement('p');
 		targetPathDisplay.classList.add('targetPath');
