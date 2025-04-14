@@ -152,6 +152,7 @@ function getScripts() {
 			};
 			scripts.push(script);
 		});
+		return scripts;
 	} else {
 		return [];
 	}
@@ -204,6 +205,10 @@ function onCommandInputBlur(event) {
 		console.warn('Command editing failed, command paragraph was already present with input!');
 	}
 	checkChange();
+	const scriptRecord = literalContainer.closest('div.scriptHolder');
+	if (scriptRecord && scriptRecord.previousElementSibling) {
+		enableDisableMoveButtonsByRecordPosition(scriptRecord.previousElementSibling);
+	}
 }
 
 function editPath(event) {
@@ -436,6 +441,7 @@ function addSaveScriptsButton() {
 	saveButton.id = 'saveScripts';
 	saveButton.addEventListener('click', saveScripts);
 	saveButton.innerHTML = 'Save changes';
+	saveButton.classList.add('main');
 	saveButtonContainer = document.createElement('div');
 	saveButtonContainer.appendChild(saveButton);
 	section.appendChild(saveButtonContainer);
