@@ -42,8 +42,12 @@ class Dispatcher {
 		if (empty($this->handler) || empty($this->action)) {
 			throw new \Exception("Dispatcher is not initialized yet!");
 		}
-		$action = $this->action;
-		$result = $this->handler->$action(...$this->urlParams);
+		try {
+			$action = $this->action;
+			$result = $this->handler->$action(...$this->urlParams);
+		} catch (\Exception $e) {
+			$result = new Response($e->getMessage(), $e->getCode() ?: 500);
+		}
 		if (
 			!empty($result) &&
 			gettype($result) === 'object' &&
