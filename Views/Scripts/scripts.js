@@ -318,7 +318,11 @@ function moveScriptLower(event) {
 		console.error('There is no list container!');
 		return;
 	}
-	listContainer.insertAfter(scriptRecord, scriptRecordBelow);
+	if (scriptRecordBelow.nextElementSibling) {
+		listContainer.insertBefore(scriptRecord, scriptRecordBelow.nextElementSibling);
+	} else {
+		listContainer.appendChild(scriptRecord);
+	}
 	[scriptRecord, scriptRecordBelow].forEach(enableDisableMoveButtonsByRecordPosition);
 }
 
@@ -328,15 +332,19 @@ function enableDisableMoveButtonsByRecordPosition(element) {
 	const upperBtn = scriptRecord.querySelector('button.upper');
 	const lowerBtn = scriptRecord.querySelector('button.lower');
 
-	if (!scriptRecord.nextElementSibling) {
-		lowerBtn.disabled = true;
-	} else {
-		lowerBtn.disabled = false;
+	if (lowerBtn) {
+		if (!scriptRecord.nextElementSibling) {
+			lowerBtn.disabled = true;
+		} else {
+			lowerBtn.disabled = false;
+		}
 	}
 
-	if (!scriptRecord.previousElementSibling) {
-		upperBtn.disabled = true;
-	} else {
-		upperBtn.disabled = false;
+	if (upperBtn) {
+		if (!scriptRecord.previousElementSibling) {
+			upperBtn.disabled = true;
+		} else {
+			upperBtn.disabled = false;
+		}
 	}
 }
