@@ -203,6 +203,7 @@ function onCommandInputBlur(event) {
 	} else {
 		console.warn('Command editing failed, command paragraph was already present with input!');
 	}
+	checkChange();
 }
 
 function editPath(event) {
@@ -250,6 +251,7 @@ function onPathInputBlur(event) {
 	} else {
 		console.warn('Target path editing failed, target paragraph was already present with input!');
 	}
+	checkChange();
 }
 
 function setButtonsDisabled(literalContainer, lever) {
@@ -281,6 +283,7 @@ function removeFromList(element) {
 		return;
 	}
 	scriptRow.remove();
+	checkChange();
 }
 
 function moveScriptUpper(event) {
@@ -306,6 +309,7 @@ function moveScriptUpper(event) {
 	}
 	listContainer.insertBefore(scriptRecord, scriptRecordAbove);
 	[scriptRecord, scriptRecordAbove].forEach(enableDisableMoveButtonsByRecordPosition);
+	checkChange();
 }
 
 function moveScriptLower(event) {
@@ -335,6 +339,7 @@ function moveScriptLower(event) {
 		listContainer.appendChild(scriptRecord);
 	}
 	[scriptRecord, scriptRecordBelow].forEach(enableDisableMoveButtonsByRecordPosition);
+	checkChange();
 }
 
 function enableDisableMoveButtonsByRecordPosition(element) {
