@@ -171,11 +171,12 @@ HttpClient.prototype = {
 	request: function (url, method, data = null, options = null) {
 		url = this.validateUrl(url);
 		method = this.validateMethod(method);
+		const contentType = this.getContentTypeHeader(data);
 		data = this.validateData(data);
 		options = this.validateOptions(options);
 		headers = this.validateHeaders(options);
 
-		headers['Content-Type'] = this.getContentTypeHeader(data);
+		headers['Content-Type'] = contentType;
 		let result = new Observable();
 		result.subscribedNotifier.subscribe(() => this.execute(headers, method, url, result, data));
 		return result;

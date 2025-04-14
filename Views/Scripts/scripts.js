@@ -404,7 +404,7 @@ function saveScripts() {
 		return;
 	}
 	const http = new HttpClient();
-	http.patch('/projects/' + projectName + '/scripts', { "Scripts": scripts }).subscribe({
+	http.patch('/projects/' + projectName + '/scripts', { Scripts: scripts }).subscribe({
 		next: (response) => {
 			console.log('Scripts saved successfully!');
 		},
