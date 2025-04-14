@@ -67,7 +67,6 @@ function addNewScript(container) {
 	commandInput.type = 'text';
 	commandInput.id = 'commandInput';
 	commandInput.name = 'commandInput';
-	commandInput.addEventListener('blur', onCommandInputBlur);
 	targetPath.classList.add('targetPath');
 	targetPath.innerHTML = currentProjectPath ?? '/';
 	actionButtonsContainer.classList.add('actionButtonsContainer');
@@ -80,6 +79,16 @@ function addNewScript(container) {
 	removeBtn.classList.add('removeBtn');
 	removeBtn.disabled = true;
 	binSymbol.src = "/Views/Assets/trashBin.svg";
+
+
+	// Adding event listeners
+	commandInput.addEventListener('blur', onCommandInputBlur);
+	upperBtn.addEventListener('click', moveScriptUpper);
+	lowerBtn.addEventListener('click', moveScriptLower);
+	editCommandBtn.addEventListener('click', editScript);
+	editPathBtn.addEventListener('click', editPath);
+	removeBtn.addEventListener('click', removeFromList);
+
 
 	// Build
 	upperBtn.appendChild(upperArrow);
