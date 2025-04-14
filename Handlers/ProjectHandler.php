@@ -16,6 +16,7 @@ class ProjectHandler extends AbstractHandler {
 	{
 		$this->di = $di;
 		$this->logger = new Logger('', __class__);
+		parent::__construct($di);
 	}
 
 	public function index()
@@ -96,7 +97,6 @@ class ProjectHandler extends AbstractHandler {
 	{
 		$logger = new Logger('', __class__);
 		$logger->setLogLevel();
-		$logger->info('Project name', $projectName);
 		/**
 		 * @var ProjectService
 		 */
@@ -106,18 +106,16 @@ class ProjectHandler extends AbstractHandler {
 			$allProjects,
 			fn ($project) => $project['projectName'] === $projectName
 		);
-		$logger->info('Filtered array', $filteredArray);
+		$logger->info('Request', $this->request);
 		if (count($filteredArray) > 0) {
 			$key = array_keys($filteredArray)[0];
 			$scripts = $this->get('Scripts');
+			$logger->info('Request', $this->request);
 			if (!ProjectService::validateScripts($scripts)) {
 				throw new \Exception('Invalid scripts data!');
 			}
 			$allProjects[$key]['scripts'] = $scripts;
 			$projectService->saveModifiedData($allProjects);
-			$logger->info('Scripts modified', $allProjects[$key]['scripts']);
-			$logger->info('Project data', $allProjects);
-			$logger->info('Saved project data', $projectService->getAllProjectsAsArray());
 			return new Response([], 200);
 		} else {
 			throw new \Exception('Project not found!');

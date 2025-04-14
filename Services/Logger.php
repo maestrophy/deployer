@@ -68,7 +68,7 @@ class Logger {
 			$valueType = gettype($value);
 			switch ($valueType) {
 				case 'object':
-					$value = var_export($value);
+					$value = var_export($value, true);
 					break;
 				case 'array':
 					$value = json_encode($value);

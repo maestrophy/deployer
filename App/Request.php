@@ -39,7 +39,7 @@ class Request {
 		$contentType = $this->getHeader('Content-Type');
 		if (!empty($contentType)) {
 			if (strpos($contentType, 'json') !== false) {
-				$this->values[$this->httpMethod] = json_decode($this->rawInput);
+				$this->values[$this->httpMethod] = json_decode($this->rawInput, true);
 				return;
 			}
 			if (strpos($contentType, 'x-www-form-urlencoded') !== false) {
@@ -48,14 +48,17 @@ class Request {
 				} else {
 					parse_str(file_get_contents('php://input'), $this->values[$this->httpMethod]);
 				}
+				return;
 			}
 			if (strpos($contentType, 'multipart/form-data') !== false) {
 				$this->values[$this->httpMethod] = $_POST;
 				$this->values['files'] = $_FILES;
+				return;
 			}
 			if (strpos($contentType, 'xml') !== false) {
 				$xml = simplexml_load_string($this->rawInput);
 				$this->values[$this->httpMethod] = json_decode(json_encode($xml), true); // Convert XML to array
+				return;
 			}
 		}
 		$this->values[$this->httpMethod] = $this->rawInput;

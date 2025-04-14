@@ -13,6 +13,7 @@ abstract class AbstractHandler {
 	function __construct(Container $di)
 	{
 		$this->di = $di;
+		$this->request = $this->di->get('request');
 	}
 
 	public abstract function index();
