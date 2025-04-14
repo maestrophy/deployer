@@ -8,15 +8,25 @@ window.app.afterInit(function () {
 		}
 	});
 	const upperButtons = document.querySelectorAll('div.positioners span.btn-container button.upper');
-	upperButtons.addEventListener('click', moveScriptUpper);
+	if (upperButtons) {
+		upperButtons.addEventListener('click', moveScriptUpper);
+	}
 	const lowerButtons = document.querySelectorAll('div.positioners span.btn-container button.lower');
-	lowerButtons.addEventListener('click', moveScriptLower);
+	if (lowerButtons) {
+		lowerButtons.addEventListener('click', moveScriptLower);
+	}
 	const editCommandButtons = document.querySelectorAll('div.actionButtonsContainer button.editCommandBtn');
-	editCommandButtons.addEventListener('click', editScript);
+	if (editCommandButtons) {
+		editCommandButtons.addEventListener('click', editScript);
+	}
 	const editPathButtons = document.querySelectorAll('div.actionButtonsContainer button.editPathBtn');
-	editPathButtons.addEventListener('click', editPath);
+	if (editPathButtons) {
+		editPathButtons.addEventListener('click', editPath);
+	}
 	const removeButtons = document.querySelectorAll('div.actionButtonsContainer button.removeBtn');
-	removeButtons.addEventListener('click', removeFromList);
+	if (removeButtons) {
+		removeButtons.addEventListener('click', removeFromList);
+	}
 });
 
 function addNewScript(container) {
