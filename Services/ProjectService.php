@@ -87,6 +87,11 @@ class ProjectService {
 		file_put_contents($this->getProjectsStoragePath(), json_encode($projects));
 	}
 
+	public function saveModifiedData(array $projects): void
+	{
+		file_put_contents($this->getProjectsStoragePath(), json_encode($projects));
+	}
+
 	/**
 	 * Undocumented function
 	 *
@@ -133,22 +138,38 @@ class ProjectService {
 			count(
 				array_filter(
 					$projectData['scripts'],
-					fn ($script) => (
-						!is_array($script) ||
-						empty($script['command']) ||
-						empty($script['schedule']) ||
-						(
-							empty($script['targetPath']) &&
-							!PathUtil::validatePath($script['targetPath'])
-						 ) ||
-						!in_array($script['schedule'], ['beforePull', 'afterPull'])
-					)
+					fn ($script) => !self::validateScript($script)
 				)
 			) > 0
 		) {
 			throw new \Exception('Scripts must be an array with a strict pattern! ' . var_export($projectData['scripts'], true));
 		}
 		return true;
+	}
+
+	public static function validateScripts(array $scripts): bool
+	{
+		return !count(
+			array_filter(
+				$scripts,
+				fn ($script) => !self::validateScript($script)
+			)
+		);
+	}
+
+	public static function validateScript(array $script): bool
+	{
+		return (
+			is_array($script) &&
+			!empty($script['command']) &&
+			is_string($script['command']) &&
+			!empty($script['schedule']) &&
+			is_string($script['schedule']) &&
+			in_array($script['schedule'], ['beforePull', 'afterPull']) &&
+			!empty($script['targetPath']) &&
+			is_string($script['targetPath']) &&
+			PathUtil::validatePath($script['targetPath'])
+		);
 	}
 
 	public static function validateGitRepository(string $path): bool

@@ -125,7 +125,10 @@ div.literalContainer p {
 input.translucentInput {
 	background: none;
 	border: none;
+	border-bottom: 1px solid black;
+	margin: 0px;
 	padding: 5px;
+	outline: none;
 }
 
 div.actionButtonsContainer {

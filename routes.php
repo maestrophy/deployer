@@ -29,7 +29,7 @@ return [
 			'projectName' => '[a-zA-Z_0-9\-\+%]+'
 		],
 		'action' => 'changeScript',
-		'methods' => 'POST'
+		'methods' => 'PATCH'
 	],
 	[
 		'uri' => 'new-project',

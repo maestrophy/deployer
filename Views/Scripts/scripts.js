@@ -359,3 +359,81 @@ function enableDisableMoveButtonsByRecordPosition(element) {
 		}
 	}
 }
+
+function validateScript(script) {
+	return (
+		script &&
+		typeof script === 'object' &&
+		script.command &&
+		typeof script.command === 'string' &&
+		script.command.length > 2 &&
+		script.schedule &&
+		typeof script.schedule === 'string' &&
+		['beforePull', 'afterPull'].includes(script.schedule) &&
+		script.targetPath &&
+		typeof script.targetPath === 'string'
+	);
+}
+
+function saveScripts(scripts) {
+	const projectName = window.location.pathname.split('/')[2];
+	if (typeof scripts !== 'object') {
+		console.error('Wrong format for scripts!');
+		return;
+	}
+	if (!Array.isArray(scripts)) {
+		console.error('Wrong format for scripts!');
+		return;
+	}
+	if (
+		scripts.length > 0 &&
+		!scripts.every(script => validateScript(script))
+	) {
+		console.error('Wrong format for scripts!');
+		return;
+	}
+	const http = new HttpClient();
+	http.patch('/projects/' + projectName + '/scripts', { "Scripts": scripts }).subscribe({
+		next: (response) => {
+			console.log('Scripts saved successfully!');
+		},
+		error: (response) => {
+			console.error('Error saving scripts:', response);
+		}
+	});
+}
+
+function checkChange() {
+	console.log(currentBuildScripts);
+	if (JSON.stringify(getScripts()) !== JSON.stringify(currentBuildScripts)) {
+		addSaveScriptsButton();
+	} else {
+		removeSaveScriptsButton();
+	}
+}
+
+function addSaveScriptsButton() {
+	const scriptsPushButton = document.querySelector('button#scriptPush');
+	if (!scriptsPushButton) {
+		console.error('Script push button not found!');
+		return;
+	}
+	const section = scriptsPushButton.closest('section.formSection');
+	if (!section) {
+		console.error('Section not found!');
+		return;
+	}
+	if (section.querySelector('button#saveScripts')) {
+		return;
+	}
+	const saveButton = document.createElement('button');
+	saveButton.id = 'saveScripts';
+	saveButton.addEventListener('click', saveScripts);
+}
+
+function removeSaveScriptsButton() {
+	const saveButton = document.querySelector('button#saveScripts');
+	if (saveButton) {
+		saveButton.remove();
+	}
+}

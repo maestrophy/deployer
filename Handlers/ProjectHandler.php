@@ -3,6 +3,7 @@
 namespace Handlers;
 
 use App\Container;
+use App\Response;
 use Services\Logger;
 use Services\ProjectService;
 use Views\ViewBuilder;
@@ -55,7 +56,8 @@ class ProjectHandler extends AbstractHandler {
 		$viewBuilder->addJSVars(
 			[
 				'currentlyActiveBranch' => $currentlyActiveBranch,
-				'currentProjectPath' => $project->getProjectPath()
+				'currentProjectPath' => $project->getProjectPath(),
+				'currentBuildScripts' => $project->getBuildScripts()
 			]
 		);
 		$viewBuilder->render();
@@ -91,7 +93,29 @@ class ProjectHandler extends AbstractHandler {
 	 * @return void
 	 */
 	public function changeScript(string $projectName)
-	{}
+	{
+		/**
+		 * @var ProjectService
+		 */
+		$projectService = $this->di->get('projectService');
+		$allProjects = $projectService->getAllProjectsAsArray();
+		$filteredArray = array_filter(
+			$allProjects,
+			fn ($project) => $project['projectName'] === $projectName
+		);
+		if (count($filteredArray) > 0) {
+			$key = array_keys($filteredArray)[0];
+			$scripts = $this->get('Scripts');
+			if (!ProjectService::validateScripts($scripts)) {
+				throw new \Exception('Invalid scripts data!');
+			}
+			$allProjects[$key]['scripts'] = $scripts;
+			$projectService->saveModifiedData($allProjects);
+			return new Response([], 200);
+		} else {
+			throw new \Exception('Project not found!');
+		}
+	}
 
 	/**
 	 * Undocumented function
