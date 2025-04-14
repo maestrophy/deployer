@@ -380,7 +380,8 @@ function validateScript(script) {
 	);
 }
 
-function saveScripts(scripts) {
+function saveScripts() {
+	const scripts = getScripts();
 	const projectName = window.location.pathname.split('/')[2];
 	if (typeof scripts !== 'object') {
 		console.error('Wrong format for scripts!');
