@@ -27,6 +27,15 @@ window.app.afterInit(function () {
 	if (removeButtons && removeButtons.length) {
 		removeButtons.forEach(btn => btn.addEventListener('click', removeFromList));
 	}
+	const scriptRecords = Array.from(document.querySelectorAll('div.scriptHolder'));
+	if (scriptRecords && scriptRecords.length) {
+		scriptRecords.forEach(record => {
+			enableDisableMoveButtonsByRecordPosition(record);
+		});
+	}
+	if (scriptRecords && scriptRecords.length > 1) {
+		enableDisableMoveButtonsByRecordPosition(scriptRecords.at(-1));
+	}
 });
 
 function addNewScript(container) {
