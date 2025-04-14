@@ -323,11 +323,7 @@ function moveScriptLower(event) {
 }
 
 function enableDisableMoveButtonsByRecordPosition(element) {
-	if (element.tagName !== 'DIV' || !element.classList.contains('scriptHolder')) {
-		const scriptRecord = element.closest('div.scriptHolder');
-	} else {
-		const scriptRecord = element;
-	}
+	const scriptRecord = element.tagName !== 'DIV' || !element.classList.contains('scriptHolder') ? element.closest('div.scriptHolder') : element;
 
 	const upperBtn = scriptRecord.querySelector('button.upper');
 	const lowerBtn = scriptRecord.querySelector('button.lower');
