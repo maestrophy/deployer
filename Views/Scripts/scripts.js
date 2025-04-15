@@ -185,13 +185,13 @@ function editScript(event) {
 function onCommandInputBlur(event) {
 	let commandInput = event.target;
 	let currentCommand = commandInput.value;
+	let literalContainer = commandInput.parentElement;
+	if (!literalContainer) {
+		return;
+	}
 	if (!currentCommand) {
 		removeFromList(commandInput);
 		setButtonsDisabled(literalContainer, false);
-		return;
-	}
-	let literalContainer = commandInput.parentElement;
-	if (!literalContainer) {
 		return;
 	}
 	setButtonsDisabled(literalContainer, false);
