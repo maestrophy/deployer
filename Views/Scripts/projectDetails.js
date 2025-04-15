@@ -41,7 +41,7 @@ function activateTab(id) {
 	});
 	const tabs = Array.from(document.querySelectorAll('div.tab'));
 	for (x = 0; x < tabs.length; x++) {
-		if (x + 1 === id) {
+		if (x + 1 === Number(id)) {
 			tabs[x].classList.add('active');
 		} else {
 			tabs[x].classList.remove('active');

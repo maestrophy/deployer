@@ -3,6 +3,10 @@ span.tab-flap {
 	border-left: 1px solid black;
 	border-right: 1px solid black;
 	background-color: rgb(220, 220, 220);
+	padding: 10px;
+	font-size: 18px;
+	border-radius: 8px;
+	cursor: pointer;
 }
 
 span.tab-flap.active {
