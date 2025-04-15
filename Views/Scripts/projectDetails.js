@@ -33,7 +33,7 @@ window.app.afterInit(function () {
 function activateTab(id) {
 	const tabFlaps = Array.from(document.querySelectorAll('span.tab-flap'));
 	tabFlaps.forEach(flap => {
-		if (flap.id === id) {
+		if (flap.id == id) {
 			flap.classList.add('active');
 		} else {
 			flap.classList.remove('active');
