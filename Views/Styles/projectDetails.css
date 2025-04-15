@@ -1,3 +1,25 @@
+span.tab-flap {
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	background-color: rgb(220, 220, 220);
+}
+
+span.tab-flap.active {
+	border-top: 1px solid black;
+	border-left: 1px solid black;
+	border-right: 1px solid black;
+	background-color: rgb(230, 240, 230);
+}
+
+div.tab {
+	display: none;
+}
+
+div.tab.active {
+	display: inline-block;
+}
+
 div.scriptsContainer {
 	overflow-y: scroll;
 	height: 40vh;
