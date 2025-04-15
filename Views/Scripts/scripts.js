@@ -187,6 +187,7 @@ function onCommandInputBlur(event) {
 	let currentCommand = commandInput.value;
 	if (!currentCommand) {
 		removeFromList(commandInput);
+		setButtonsDisabled(literalContainer, false);
 		return;
 	}
 	let literalContainer = commandInput.parentElement;
@@ -287,7 +288,15 @@ function removeFromList(element) {
 	if (!scriptRow) {
 		return;
 	}
+	let scriptRecordsAround = [];
+	if (scriptRow.previousElementSibling) {
+		scriptRecordsAround.push(scriptRow.previousElementSibling);
+	}
+	if (scriptRow.nextElementSibling) {
+		scriptRecordsAround.push(scriptRow.nextElementSibling);
+	}
 	scriptRow.remove();
+	scriptRecordsAround.forEach(scriptRecord => enableDisableMoveButtonsByRecordPosition(scriptRecord));
 	checkChange();
 }
 
