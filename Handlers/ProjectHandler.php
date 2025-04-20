@@ -176,7 +176,7 @@ class ProjectHandler extends AbstractHandler {
 	public function checkPath()
 	{
 		$projectPath = $_GET['projectPath'];
-		$pathValid = (new ProjectService())->validateGitRepository($projectPath);
+		$pathValid = ProjectService::validateGitRepository($projectPath);
 		return ['pathValid' => $pathValid];
 	}
 
