@@ -177,11 +177,11 @@ class ProjectService {
 		if (empty($path)) {
 			return false;
 		}
-		$path = PathUtil::makeFullPathFromRelative($path);
+		$path = PathUtil::makeFullPathFromRelative($path, false);
 		if (!is_dir($path)) {
 			return false;
 		}
-		if (!is_dir($path . '.git')) {
+		if (!is_dir($path . '/.git')) {
 			return false;
 		}
 		try {
@@ -189,7 +189,7 @@ class ProjectService {
 			$exitCode = 0;
 		} catch(\Exception $e) {
 			$exitCode = 1;
-			exit($e->getMessage());
+			$e->getMessage();
 		}
 		return ($exitCode === 0);
 	}

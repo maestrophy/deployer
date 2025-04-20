@@ -177,13 +177,15 @@ class ProjectHandler extends AbstractHandler {
 	{
 		$projectPath = $_GET['projectPath'];
 		$pathValid = ProjectService::validateGitRepository($projectPath);
-		return ['pathValid' => $pathValid];
+		$response = new Response(['pathValid' => $pathValid], 201);
+		return $response;
 	}
 
 	public function checkProjectName()
 	{
 		$projectName = $_GET['projectName'];
 		$project = (new ProjectService())->getProject($projectName);
-		return ['projectExists' => !empty($project)];
+		$response = new Response(['projectExists' => !empty($project)], 201);
+		return $response;
 	}
 }
