@@ -89,6 +89,11 @@ class Request {
 		return isset($this->values[$this->httpMethod][$key]) ? $this->values[$this->httpMethod][$key] : $this->values['GET'][$key];
 	}
 
+	public function getRequestBody(): array|null
+	{
+		return !isset($this->values[$this->httpMethod]) ? $this->values[$this->httpMethod] : null;
+	}
+
 	public function isXHR(): bool
 	{
 		return $this->isXmlRequest;

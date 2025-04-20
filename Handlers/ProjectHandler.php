@@ -159,10 +159,17 @@ class ProjectHandler extends AbstractHandler {
 	public function addProject()
 	{
 		$responseContent = []; 
+		$projectName = $this->get('projectName');
+		$projectPath = $this->get('projectPath');
 		try {
-			(new ProjectService())->createNewProject($_POST);
+			(new ProjectService())->createNewProject(
+				[
+					'projectName' => $projectName,
+					'projectPath' => $projectPath
+				]
+			);
 			$responseContent['status'] = 'success';
-			$responseContent['newProjectName'] = $_POST['projectName'];
+			$responseContent['newProjectName'] = $projectName;
 		} catch (\Throwable $e) {
 			$responseContent['status'] = 'failed';
 			$responseContent['message'] = $e->getMessage();
