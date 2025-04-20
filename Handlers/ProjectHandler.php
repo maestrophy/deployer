@@ -158,18 +158,20 @@ class ProjectHandler extends AbstractHandler {
 	 */
 	public function addProject()
 	{
+		$responseContent = []; 
 		try {
 			(new ProjectService())->createNewProject($_POST);
-			$response['status'] = 'success';
-			$response['newProjectName'] = $_POST['projectName'];
+			$responseContent['status'] = 'success';
+			$responseContent['newProjectName'] = $_POST['projectName'];
 		} catch (\Throwable $e) {
-			$response['status'] = 'failed';
-			$response['message'] = $e->getMessage();
+			$responseContent['status'] = 'failed';
+			$responseContent['message'] = $e->getMessage();
 			if (!empty($e->getCode()) && in_array($e->getCode(), [100001, 100002])) {
 				$fieldCodePairs = include 'fieldCodePairs.php';
-				$response['field'] = $fieldCodePairs[$e->getCode()];
+				$responseContent['field'] = $fieldCodePairs[$e->getCode()];
 			}
 		}
+		$response = new Response($responseContent, 201);
 		return $response;
 	}
 
@@ -177,7 +179,7 @@ class ProjectHandler extends AbstractHandler {
 	{
 		$projectPath = $_GET['projectPath'];
 		$pathValid = ProjectService::validateGitRepository($projectPath);
-		$response = new Response(['pathValid' => $pathValid], 201);
+		$response = new Response(['pathValid' => $pathValid], 202);
 		return $response;
 	}
 
@@ -185,7 +187,7 @@ class ProjectHandler extends AbstractHandler {
 	{
 		$projectName = $_GET['projectName'];
 		$project = (new ProjectService())->getProject($projectName);
-		$response = new Response(['projectExists' => !empty($project)], 201);
+		$response = new Response(['projectExists' => !empty($project)], 202);
 		return $response;
 	}
 }
