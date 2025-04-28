@@ -53,6 +53,10 @@ div.scriptsContainer div.scriptHolder {
 	align-items: center;
 }
 
+div.scriptsContainer div.scriptHolder:not(.checkout) {
+	justify-content: space-between;
+}
+
 div.scriptsContainer div.scriptHolder:nth-child(odd) {
 	background-image: radial-gradient(rgb(230, 230, 230), rgb(240, 240, 240));
 }
@@ -66,9 +70,9 @@ div.scriptsContainer div.scriptHolder.checkout {
 }
 
 div.scriptsContainer div.scriptHolder div.positioners {
-	width: 100px;
-	min-width: 100px;
-	max-width: 100px;
+	width: min-content;
+	min-width: 120px;
+	max-width: 150px;
 	display: inline-flex;
 }
 
@@ -105,8 +109,15 @@ button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	margin-right: 10px;
-	margin-left: 10px;
+}
+
+
+div.scriptsContainer
+div.scriptHolder
+div.actionButtonsContainer
+button {
+	margin-right: 5px;
+	margin-left: 5px;
 }
 
 div.scriptsContainer
@@ -148,7 +159,7 @@ img {
 
 div.literalContainer {
 	display: inline-block;
-	width: 75%;
+	width: calc(98% - 120px - 144px);
 }
 
 div.literalContainer p {
