@@ -105,6 +105,8 @@ button {
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	margin-right: 10px;
+	margin-left: 10px;
 }
 
 div.scriptsContainer
@@ -153,6 +155,7 @@ div.literalContainer p {
 	margin: 0px;
 	padding: 5px;
 	overflow-x: scroll;
+	white-space: nowrap;
 }
 
 input.translucentInput {
@@ -163,6 +166,7 @@ input.translucentInput {
 	padding: 5px;
 	outline: none;
 	font-size: 16px;
+	width: 90%;
 }
 
 div.actionButtonsContainer {
