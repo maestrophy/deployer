@@ -44,8 +44,9 @@ window.app.afterInit(function () {
 					}
 					if (partial.finished && partial.finished === 'upToDate') {
 						const scriptScreen = document.querySelector('#processScreen');
+						let inProgressScriptEntries;
 						do {
-							let inProgressScriptEntries =
+							inProgressScriptEntries =
 								Array.from(
 									scriptScreen.querySelectorAll('div.scriptEntry')
 								).filter(scriptEntry =>
