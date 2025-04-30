@@ -11,7 +11,8 @@ class CommandService {
 		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::validateCommand($command) . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'");
+			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
@@ -27,7 +28,8 @@ class CommandService {
 		self::initLogger();
 		$userConfig = include 'config.php';
 		self::$logger->info('Command', $command);
-		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::validateCommand($command) . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'");
+		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
@@ -43,7 +45,8 @@ class CommandService {
 		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::validateCommand($command) . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'");
+			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
@@ -59,7 +62,8 @@ class CommandService {
 		self::initLogger();
 		$userConfig = include 'config.php';
 		self::$logger->info('Command', $command);
-		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::validateCommand($command) . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'");
+		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
