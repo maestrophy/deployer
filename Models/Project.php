@@ -113,7 +113,7 @@ class Project extends BaseModel {
 						);
 						$response->sendPartial();
 					}
-					return;
+					return true;
 				}
 				$response->setContent(
 					[
@@ -121,7 +121,6 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
-				return true;
 			} catch (\Exception $e) {
 				$this->logger->log('Pull failed!', $e->getMessage());
 				$response->setContent(
