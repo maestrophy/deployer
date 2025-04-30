@@ -94,7 +94,27 @@ class Project extends BaseModel {
 		if ($branchName === $activeBranch) {
 			$this->logger->log('Only pulling, staying the same branch');
 			try {
-				$this->pull();
+				$pullResult = $this->pull();
+				if (
+					is_array($pullResult) &&
+					count($pullResult) === 1 &&
+					$pullResult[0] === 'Already up to date.'
+				) {
+					$response->setContent(
+						[
+							'scriptFinished' => 'pull'
+						]
+					);
+					foreach ($scriptsAfterPull as $script) {
+						$response->setContent(
+							[
+								'scriptFinished' => $script['command']
+							]
+						);
+						$response->sendPartial();
+					}
+					return;
+				}
 				$response->setContent(
 					[
 						'scriptFinished' => 'pull'
