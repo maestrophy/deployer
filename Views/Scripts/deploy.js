@@ -43,6 +43,7 @@ window.app.afterInit(function () {
 						updateStatus(partial);
 					}
 					if (partial.finished && partial.finished === 'upToDate') {
+						const scriptScreen = document.querySelector('#processScreen');
 						do {
 							let inProgressScriptEntries =
 								Array.from(
