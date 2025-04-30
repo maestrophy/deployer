@@ -105,6 +105,7 @@ class Project extends BaseModel {
 							'scriptFinished' => 'pull'
 						]
 					);
+					$response->sendPartial();
 					foreach ($scriptsAfterPull as $script) {
 						$response->setContent(
 							[
