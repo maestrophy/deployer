@@ -30,7 +30,7 @@ window.app.afterInit(function () {
 			event.preventDefault();
 			const http = new HttpClient();
 			http.patch(
-				'projects/' + projectName + '/deploy',
+				'/projects/' + projectName + '/deploy',
 				{
 					branch: branchSelector.value
 				}
