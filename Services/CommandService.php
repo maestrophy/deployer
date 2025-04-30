@@ -8,16 +8,15 @@ class CommandService {
 	public static function runCommandsAsUser(array $commands): bool
 	{
 		self::initLogger();
-		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'");
-			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo su - maestro -c '" . $command . "'");
+			$result = exec("echo su - maestro -c '" . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
 			if ($exitCode !== 0) {
-				throw new \Exception(join("\n", $output));
+				throw new \Exception(var_export($output, true));
 			}
 		}
 		return true;
@@ -26,15 +25,14 @@ class CommandService {
 	public static function runCommandAsUser(string $command): array
 	{
 		self::initLogger();
-		$userConfig = include 'config.php';
 		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'");
-		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . $command . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo su - maestro -c '" . $command . "'");
+		$result = exec("echo su - maestro -c '" . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
 		if ($exitCode !== 0) {
-			throw new \Exception(join("\n", $output));
+			throw new \Exception(var_export($output, true));
 		}
 		return $output;
 	}
@@ -42,16 +40,15 @@ class CommandService {
 	public static function runCommandsAsUserInFolder(array $commands, string $path): bool
 	{
 		self::initLogger();
-		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'");
-			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo su - maestro -c 'cd " . $path . " && " . $command . "'");
+			$result = exec("echo su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
 			if ($exitCode !== 0) {
-				throw new \Exception(var_export($output));
+				throw new \Exception(var_export($output, true));
 			}
 		}
 		return true;
@@ -60,15 +57,14 @@ class CommandService {
 	public static function runCommandAsUserInFolder(string $command, string $path): array
 	{
 		self::initLogger();
-		$userConfig = include 'config.php';
 		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'");
-		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo su - maestro -c 'cd " . $path . " && " . $command . "'");
+		$result = exec("echo su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
 		if ($exitCode !== 0) {
-			throw new \Exception(join("\n", $output));
+			throw new \Exception(var_export($output, true));
 		}
 		return $output;
 	}
@@ -83,10 +79,5 @@ class CommandService {
 		} else {
 			self::$logger = $logger;
 		}
-	}
-
-	public static function validateCommand(string $command)
-	{
-		return str_replace("\"", "\\\"", $command);
 	}
 }
