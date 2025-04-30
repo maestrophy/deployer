@@ -424,7 +424,6 @@ function saveScripts() {
 }
 
 function checkChange() {
-	console.log(currentBuildScripts);
 	if (JSON.stringify(getScripts()) !== JSON.stringify(currentBuildScripts)) {
 		addSaveScriptsButton();
 	} else {

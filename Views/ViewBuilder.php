@@ -143,7 +143,7 @@ class ViewBuilder {
 							break;
 						case 'object':
 						case 'array':
-							echo "var " . $varName . " = JSON.parse('" . json_encode($value) . "');";
+							echo "var " . $varName . " = " . json_encode($value, JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP) . ";";
 							break;
 						case 'NULL':
 							echo "var " . $varName . " = null;";

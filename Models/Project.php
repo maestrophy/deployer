@@ -34,20 +34,65 @@ class Project extends BaseModel {
 		$response = $this->di->get('response');
 		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
 
-		// Only pulling, staying the same branch
-		if ($branchName === $this->getActiveBranch()) {
-			$response->setContent(
-				[
-					'allScripts' => [
-						[
-							'schedule' => 'none',
-							'targetPath' => '',
-							'command' => 'pull'
-						]
-					]
+		$response->sendPartial();
+		
+		$activeBranch = $this->getActiveBranch();
+		$this->logger->log('Branch to switch on', $branchName);
+		$this->logger->log('Active branch', $activeBranch);
+		
+		// Separating scripts to execute before, and after checkout
+		$separated = $this->getScriptsSeparated();
+		$scriptsBeforePull = $separated['before'];
+		$this->logger->log('Scripts before', $scriptsBeforePull);
+		$scriptsAfterPull = $separated['after'];
+		$this->logger->log('Scripts after', $scriptsAfterPull);
+
+		$response->setContent(
+			[
+				'allScripts' => [
+					...$scriptsBeforePull,
+					[
+						'schedule' => 'none',
+						'targetPath' => '',
+						'command' => ($branchName === $activeBranch ? 'pull' : 'checkout')
+					],
+					...$scriptsAfterPull
 				]
-			);
-			$response->sendPartial();
+			]
+		);
+		$response->sendPartial();
+
+		// Executing scripts before checkout
+		foreach ($scriptsBeforePull as $script) {
+			$this->logger->log('Script to execute', $script);
+			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
+			$this->logger->log('Target path', $targetPath);
+			try {
+				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
+				$response->setContent(
+					[
+						'scriptFinished' => $script['command']
+					]
+				);
+				$response->sendPartial();
+				$this->logger->log('Script successfully executed');
+			} catch (Exception $e) {
+				$response->setContent(
+					[
+						'scriptFailed' => $script['command'],
+						'errorMessage' => $e->getMessage()
+					]
+				);
+				$response->sendPartial();
+
+				$this->logger->log('Script failed', $e->getMessage());
+				return false;
+			}
+		}
+
+		// Only pulling, staying the same branch
+		if ($branchName === $activeBranch) {
+			$this->logger->log('Only pulling, staying the same branch');
 			try {
 				$this->pull();
 				$response->setContent(
@@ -58,6 +103,7 @@ class Project extends BaseModel {
 				$response->sendPartial();
 				return true;
 			} catch (\Exception $e) {
+				$this->logger->log('Pull failed!', $e->getMessage());
 				$response->setContent(
 					[
 						'scriptFailed' => 'pull',
@@ -67,67 +113,28 @@ class Project extends BaseModel {
 				$response->sendPartial();
 				return false;
 			}
-		}
-
-		// Separating scripts to execute before, and after checkout
-		$separated = $this->getScriptsSeparated();
-		$scriptsBeforePull = $separated['before'];
-		$scriptsAfterPull = $separated['after'];
-		$response->setContent(
-			[
-				'allScripts' => [
-					...$scriptsBeforePull,
-					[
-						'schedule' => 'none',
-						'targetPath' => '',
-						'command' => 'checkout'
-					],
-					...$scriptsAfterPull
-				]
-			]
-		);
-		$response->sendPartial();
-
-		// Executing scripts before checkout
-		foreach ($scriptsBeforePull as $script) {
-			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
+		} else {
 			try {
-				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
-				$response->setContent(
-					[
-						'scriptFinished' => $script['command']
-					]
-				);
-				$response->sendPartial();
+				CommandService::runCommandAsUserInFolder('git checkout -B branch-name origin/' . $branchName, $this->path);
+				$this->logger->log('Checkout succeeded!');
 			} catch (Exception $e) {
 				$response->setContent(
 					[
-						'scriptFailed' => $script['command'],
+						'scriptFailed' => 'checkout',
 						'errorMessage' => $e->getMessage()
 					]
 				);
 				$response->sendPartial();
+				$this->logger->log('Pull failed!', $e->getMessage());
 				return false;
 			}
 		}
 
-		// Checkout
-		try {
-			CommandService::runCommandAsUserInFolder('git checkout -B branch-name origin/' . $branchName, $this->path);
-		} catch (Exception $e) {
-			$response->setContent(
-				[
-					'scriptFailed' => 'checkout',
-					'errorMessage' => $e->getMessage()
-				]
-			);
-			$response->sendPartial();
-			return false;
-		}
-
 		// Executing scripts after checkout
 		foreach ($scriptsAfterPull as $script) {
+			$this->logger->log('Script to execute', $script);
 			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
+			$this->logger->log('Target path', $targetPath);
 			try {
 				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
 				$response->setContent(
@@ -136,6 +143,7 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
+				$this->logger->log('Script successfully executed');
 			} catch (Exception $e) {
 				$response->setContent(
 					[
@@ -144,6 +152,8 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
+
+				$this->logger->log('Script failed', $e->getMessage());
 				return false;
 			}
 		}

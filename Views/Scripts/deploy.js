@@ -3,6 +3,7 @@ window.app.afterInit(function () {
 	const branchSelector = document.querySelector('#branchSelector');
 	const branchSelectorErrorMessage = branchSelector.parentElement.querySelector('.errorMessage');
 	const deployBtn = document.querySelector('#deployBtn');
+	
 	if (
 		!projectName ||
 		!branchSelector ||
@@ -38,14 +39,10 @@ window.app.afterInit(function () {
 					if (partial.allScripts) {
 						showProgress(partial.allScripts);
 					}
-					if (partial.scriptFinished) {
-						markScriptAsFinished(partial.scriptFinished);
+					if (partial.scriptFinished || partial.scriptFailed) {
+						updateStatus(partial);
 					}
-					if (partial.scriptFailed) {
-						errorOnExecutingScript(partial.scriptFailed, partial.errorMessage)
-					}
-				},
-				next: (response) => {}
+				}
 			});
 		} else {
 			branchSelector.classList.add('error');
@@ -54,9 +51,66 @@ window.app.afterInit(function () {
 		}
 	});
 
-	function showProgress(scripts) {}
+	function showProgress(scripts) {
+		const scriptsScreen = document.querySelector('#processScreen');
+		const scriptEntries = scripts.map(script => createProcessEntry(script));
+		scriptEntries.forEach(scriptEntry => scriptsScreen.appendChild(scriptEntry));
+		scriptsScreen.style.display = 'inline-flex';
+		updateStatus();
+	}
 
-	function markScriptAsFinished(scriptName) {}
+	function createProcessEntry(script) {
+		const scriptEntry = document.createElement('div');
+		scriptEntry.classList.add('scriptEntry');
+		const statusSymbol = document.createElement('img');
+		statusSymbol.src = '/Views/Assets/waiting.svg';
+		statusSymbol.classList.add('statusSymbol');
+		const statusLiteral = document.createElement('div');
+		statusLiteral.classList.add('statusLiteral', 'ilf');
+		statusLiteral.innerHTML = 'Waiting...';
+		const scriptLiteral = document.createElement('div');
+		scriptLiteral.classList.add('scriptLiteral', 'ilf', 'no-scrollbar');
+		scriptLiteral.innerHTML = script.command;
+		scriptEntry.appendChild(statusSymbol);
+		scriptEntry.appendChild(statusLiteral);
+		scriptEntry.appendChild(scriptLiteral);
+		return scriptEntry;
+	}
 
-	function errorOnExecutingScript(scriptName, message) {}
+	function updateStatus(statusMessage = {}) {
+		const scriptScreen = document.querySelector('#processScreen');
+		const scriptEntries = Array.from(scriptScreen.querySelectorAll('div.scriptEntry'));
+		console.log(scriptEntries);
+		console.log(statusMessage);
+		const currentlyRunningScriptIndex = scriptEntries.findIndex(scriptEntry => scriptEntry.querySelector('img').src.endsWith('/Views/Assets/miniSpinner.svg'));
+		console.log(currentlyRunningScriptIndex);
+		if (currentlyRunningScriptIndex < 0) {
+			scriptEntries[0].querySelector('img').src = '/Views/Assets/miniSpinner.svg';
+			return;
+		}
+		if (statusMessage.scriptFinished) {
+			scriptEntries[currentlyRunningScriptIndex].querySelector('img').src = '/Views/Assets/success.svg';
+			scriptEntries[currentlyRunningScriptIndex].querySelector('div.statusLiteral').innerHTML = 'Successfully executed';
+			if (currentlyRunningScriptIndex === scriptEntries.length - 1) {
+				indicateFullSuccess();
+				return;
+			}
+			scriptEntries[currentlyRunningScriptIndex + 1].querySelector('img').src = '/Views/Assets/miniSpinner.svg';
+			scriptEntries[currentlyRunningScriptIndex + 1].querySelector('div.statusLiteral').innerHTML = 'Executing...';
+		} else if (statusMessage.scriptFailed) {
+			for (let i = currentlyRunningScriptIndex; i < scriptEntries.length; i++) {
+				scriptEntries[i].querySelector('img').src = '/Views/Assets/fail.svg';
+				scriptEntries[i].querySelector('div.statusLiteral').innerHTML = 'Execution failed';
+			}
+			indicateError(statusMessage.errorMessage);
+		}
+	}
+
+	function indicateFullSuccess() {
+		console.log('All scripts executed successfully');
+	}
+
+	function indicateError(errorMessage) {
+		console.log('Error: ' + errorMessage);
+	}
 });

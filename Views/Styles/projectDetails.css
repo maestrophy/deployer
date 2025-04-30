@@ -17,6 +17,14 @@ span.tab-flap.active {
 	background-color: rgb(230, 240, 230);
 }
 
+.no-scrollbar {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
 div.centered {
 	display: inline-block;
 }
@@ -79,8 +87,13 @@ div.scriptsContainer div.scriptHolder div.positioners {
 div.scriptsContainer
 div.scriptHolder
 div.positioners
-span.ilb {
+span.ilb,
+div.ilb {
 	display: inline-block;
+}
+
+.ilf {
+	display: inline-flex;
 }
 
 div.scriptsContainer
@@ -182,4 +195,60 @@ input.translucentInput {
 
 div.actionButtonsContainer {
 	display: inline-flex;
+}
+
+
+/* Deploy page styles */
+
+div#processScreen {
+	display: none;
+	border-radius: 10px;
+	background-color: rgb(252, 252, 252);
+	border: 2px solid rgb(200, 200, 200);
+	box-shadow: inset 0 0 10px rgb(150, 150, 150);
+	padding: 15px;
+	flex-direction: column;
+	width: 80%;
+	max-width: 80%;
+	min-width: 420px;
+}
+
+div#processScreen div.scriptEntry {
+	width: 100%;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+}
+
+div#processScreen div.scriptEntry:not(:first-of-type) {
+	border-top: 1px dotted rgba(200, 200, 200, 0.6);
+}
+
+div#processScreen div,
+div#processScreen img {
+	height: 40px;
+	align-items: center;
+}
+
+div#processScreen div.scriptEntry img {
+	padding-right: 10px;
+	border-right: 1px dotted rgba(200, 200, 200, 0.6);
+}
+
+div#processScreen div.scriptEntry div.statusLiteral {
+	width: 142px;
+	border-right: 1px dotted rgba(200, 200, 200, 0.6);
+}
+
+div#processScreen div.scriptEntry div.scriptLiteral {
+	overflow-x: scroll;
+	white-space: nowrap;
+	width: calc(95% - 232px);
+}
+
+div#processScreen div.scriptEntry div.scriptLiteral,
+div#processScreen div.scriptEntry div.statusLiteral {
+	padding: 0px 10px;
+	text-align: center;
 }
