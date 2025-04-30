@@ -23,6 +23,9 @@ class Response {
 		}
 		$this->addHeadersAndAddPartialIndicator();
 		$this->setRequiredHeaders();
+		if (ob_get_level() === 0) {
+			ob_start();
+		}
 		echo empty($this->literalCurrentContent) ? '' : $this->literalCurrentContent;
 		ob_flush();
 		flush();
@@ -53,11 +56,10 @@ class Response {
 
 	private function addHeadersAndAddPartialIndicator(): void
 	{
-		if (headers_sent()) {
-			return;
-		}
 		if (is_array($this->currentContent)) {
-			$this->addHeader('Content-Type', 'application/json');
+			if (!headers_sent()) {
+				$this->addHeader('Content-Type', 'application/json');
+			}
 			$this->currentContent['duringProgress'] = true;
 			$this->literalCurrentContent = json_encode($this->currentContent);
 			return;
@@ -65,7 +67,9 @@ class Response {
 		if (is_string($this->currentContent)) {
 			$tryJson = json_decode($this->currentContent, true);
 			if (json_last_error() === JSON_ERROR_NONE) {
-				$this->addHeader('Content-Type', 'application/json');
+				if (!headers_sent()) {
+					$this->addHeader('Content-Type', 'application/json');
+				}
 				$tryJson['duringProgress'] = true;
 				$this->currentContent = json_encode($tryJson);
 				$this->literalCurrentContent = $this->currentContent;
@@ -75,9 +79,13 @@ class Response {
 		if (is_object($this->currentContent)) {
 			$this->currentContent->duringProgress = true;
 			$this->literalCurrentContent = json_encode($this->currentContent);
-			$this->addHeader('Content-Type', 'application/json');
+			if (!headers_sent()) {
+				$this->addHeader('Content-Type', 'application/json');
+			}
 		}
-		$this->addHeader('Connection', 'close');
+		if (!headers_sent()) {
+			$this->addHeader('Connection', 'close');
+		}
 	}
 
 	public function addHeader(string $headerName, string $headerValue): bool

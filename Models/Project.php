@@ -116,6 +116,12 @@ class Project extends BaseModel {
 		} else {
 			try {
 				CommandService::runCommandAsUserInFolder('git checkout -B branch-name origin/' . $branchName, $this->path);
+				$response->setContent(
+					[
+						'scriptFinished' => 'checkout'
+					]
+				);
+				$response->sendPartial();
 				$this->logger->log('Checkout succeeded!');
 			} catch (Exception $e) {
 				$response->setContent(

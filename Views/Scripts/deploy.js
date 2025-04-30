@@ -80,10 +80,7 @@ window.app.afterInit(function () {
 	function updateStatus(statusMessage = {}) {
 		const scriptScreen = document.querySelector('#processScreen');
 		const scriptEntries = Array.from(scriptScreen.querySelectorAll('div.scriptEntry'));
-		console.log(scriptEntries);
-		console.log(statusMessage);
 		const currentlyRunningScriptIndex = scriptEntries.findIndex(scriptEntry => scriptEntry.querySelector('img').src.endsWith('/Views/Assets/miniSpinner.svg'));
-		console.log(currentlyRunningScriptIndex);
 		if (currentlyRunningScriptIndex < 0) {
 			scriptEntries[0].querySelector('img').src = '/Views/Assets/miniSpinner.svg';
 			return;
