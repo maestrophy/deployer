@@ -102,18 +102,10 @@ class Project extends BaseModel {
 				) {
 					$response->setContent(
 						[
-							'scriptFinished' => 'pull'
+							'finished' => 'upToDate'
 						]
 					);
 					$response->sendPartial();
-					foreach ($scriptsAfterPull as $script) {
-						$response->setContent(
-							[
-								'scriptFinished' => $script['command']
-							]
-						);
-						$response->sendPartial();
-					}
 					return true;
 				}
 				$response->setContent(

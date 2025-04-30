@@ -42,6 +42,21 @@ window.app.afterInit(function () {
 					if (partial.scriptFinished || partial.scriptFailed) {
 						updateStatus(partial);
 					}
+					if (partial.finished && partial.finished === 'upToDate') {
+						do {
+							let inProgressScriptEntries =
+								Array.from(
+									scriptScreen.querySelectorAll('div.scriptEntry')
+								).filter(scriptEntry =>
+									!scriptEntry.querySelector('img').src.endsWith('/Views/Assets/success.svg')
+								);
+							if (inProgressScriptEntries.length > 0) {
+								updateStatus({
+									scriptFinished: true
+								});
+							}
+						} while (inProgressScriptEntries.length > 0);
+					}
 				}
 			});
 		} else {
