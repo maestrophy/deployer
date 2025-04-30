@@ -10,8 +10,8 @@ class CommandService {
 		self::initLogger();
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "su - maestro -c '" . $command . "'");
-			$result = exec("su - maestro -c '" . $command . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo su - maestro -c '" . $command . "'");
+			$result = exec("echo su - maestro -c '" . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
@@ -26,8 +26,8 @@ class CommandService {
 	{
 		self::initLogger();
 		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "su - maestro -c '" . $command . "'");
-		$result = exec("su - maestro -c '" . $command . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo su - maestro -c '" . $command . "'");
+		$result = exec("echo su - maestro -c '" . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
@@ -42,8 +42,8 @@ class CommandService {
 		self::initLogger();
 		foreach ($commands as $command) {
 			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "su - maestro -c 'cd " . $path . " && " . $command . "'");
-			$result = exec("su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+			self::$logger->info('Full command', "echo su - maestro -c 'cd " . $path . " && " . $command . "'");
+			$result = exec("echo su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 			self::$logger->info('Output', $output);
 			self::$logger->info('Exit code', $exitCode);
 			self::$logger->info('Result', $result);
@@ -58,8 +58,8 @@ class CommandService {
 	{
 		self::initLogger();
 		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "su - maestro -c 'cd " . $path . " && " . $command . "'");
-		$result = exec("su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
+		self::$logger->info('Full command', "echo su - maestro -c 'cd " . $path . " && " . $command . "'");
+		$result = exec("echo su - maestro -c 'cd " . $path . " && " . $command . "'", $output, $exitCode);
 		self::$logger->info('Output', $output);
 		self::$logger->info('Exit code', $exitCode);
 		self::$logger->info('Result', $result);
