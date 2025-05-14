@@ -95,8 +95,6 @@ class ProjectHandler extends AbstractHandler {
 	 */
 	public function changeScript(string $projectName)
 	{
-		$logger = new Logger('', __class__);
-		$logger->setLogLevel();
 		/**
 		 * @var ProjectService
 		 */
@@ -106,11 +104,9 @@ class ProjectHandler extends AbstractHandler {
 			$allProjects,
 			fn ($project) => $project['projectName'] === $projectName
 		);
-		$logger->info('Request', $this->request);
 		if (count($filteredArray) > 0) {
 			$key = array_keys($filteredArray)[0];
 			$scripts = $this->get('Scripts');
-			$logger->info('Request', $this->request);
 			if (!ProjectService::validateScripts($scripts)) {
 				throw new \Exception('Invalid scripts data!');
 			}

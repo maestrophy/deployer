@@ -7,15 +7,9 @@ class CommandService {
 
 	public static function runCommandsAsUser(array $commands): bool
 	{
-		self::initLogger();
 		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
-			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::formatCommand($command) . "'");
 			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::formatCommand($command) . "'", $output, $exitCode);
-			self::$logger->info('Output', $output);
-			self::$logger->info('Exit code', $exitCode);
-			self::$logger->info('Result', $result);
 			if ($exitCode !== 0) {
 				throw new \Exception(var_export($output, true));
 			}
@@ -25,14 +19,8 @@ class CommandService {
 
 	public static function runCommandAsUser(string $command): array
 	{
-		self::initLogger();
 		$userConfig = include 'config.php';
-		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::formatCommand($command) . "'");
 		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c '" . self::formatCommand($command) . "'", $output, $exitCode);
-		self::$logger->info('Output', $output);
-		self::$logger->info('Exit code', $exitCode);
-		self::$logger->info('Result', $result);
 		if ($exitCode !== 0) {
 			throw new \Exception(var_export($output, true));
 		}
@@ -41,15 +29,9 @@ class CommandService {
 
 	public static function runCommandsAsUserInFolder(array $commands, string $path): bool
 	{
-		self::initLogger();
 		$userConfig = include 'config.php';
 		foreach ($commands as $command) {
-			self::$logger->info('Command', $command);
-			self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::formatCommand($command) . "'");
 			$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::formatCommand($command) . "'", $output, $exitCode);
-			self::$logger->info('Output', $output);
-			self::$logger->info('Exit code', $exitCode);
-			self::$logger->info('Result', $result);
 			if ($exitCode !== 0) {
 				throw new \Exception(var_export($output, true));
 			}
@@ -59,14 +41,8 @@ class CommandService {
 
 	public static function runCommandAsUserInFolder(string $command, string $path): array
 	{
-		self::initLogger();
 		$userConfig = include 'config.php';
-		self::$logger->info('Command', $command);
-		self::$logger->info('Full command', "echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::formatCommand($command) . "'");
 		$result = exec("echo '" . $userConfig['password'] . "' | su - maestro -c 'cd " . $path . " && " . self::formatCommand($command) . "'", $output, $exitCode);
-		self::$logger->info('Output', $output);
-		self::$logger->info('Exit code', $exitCode);
-		self::$logger->info('Result', $result);
 		if ($exitCode !== 0) {
 			throw new \Exception(var_export($output, true));
 		}

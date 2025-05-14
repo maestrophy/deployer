@@ -21,7 +21,6 @@ class ViewBuilder {
 		if (empty($layout) || (file_exists($layout) && $layout !== 'Views/layout.phtml')) {
 			$this->layout = $layout;
 			$this->layoutVars = [];
-			echo "Ide futunk be";
 		} else {
 			$projectService = new ProjectService();
 			$this->layout = 'Views/layout.phtml';
