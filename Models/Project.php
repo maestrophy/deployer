@@ -13,8 +13,6 @@ class Project extends BaseModel {
 	private string $name;
 	private string $path;
 	private array $scripts;
-	private array $branches;
-	private string $activeBranch;
 	private Logger $logger;
 
 	function __construct(array $data)
@@ -37,15 +35,11 @@ class Project extends BaseModel {
 		$response->sendPartial();
 		
 		$activeBranch = $this->getActiveBranch();
-		$this->logger->log('Branch to switch on', $branchName);
-		$this->logger->log('Active branch', $activeBranch);
 		
 		// Separating scripts to execute before, and after checkout
 		$separated = $this->getScriptsSeparated();
 		$scriptsBeforePull = $separated['before'];
-		$this->logger->log('Scripts before', $scriptsBeforePull);
 		$scriptsAfterPull = $separated['after'];
-		$this->logger->log('Scripts after', $scriptsAfterPull);
 
 		$response->setContent(
 			[
@@ -64,9 +58,7 @@ class Project extends BaseModel {
 
 		// Executing scripts before checkout
 		foreach ($scriptsBeforePull as $script) {
-			$this->logger->log('Script to execute', $script);
 			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
-			$this->logger->log('Target path', $targetPath);
 			try {
 				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
 				$response->setContent(
@@ -75,7 +67,6 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
-				$this->logger->log('Script successfully executed');
 			} catch (Exception $e) {
 				$response->setContent(
 					[
@@ -85,14 +76,12 @@ class Project extends BaseModel {
 				);
 				$response->sendPartial();
 
-				$this->logger->log('Script failed', $e->getMessage());
 				return false;
 			}
 		}
 
 		// Only pulling, staying the same branch
 		if ($branchName === $activeBranch) {
-			$this->logger->log('Only pulling, staying the same branch');
 			try {
 				$pullResult = $this->pull();
 				if (
@@ -115,7 +104,6 @@ class Project extends BaseModel {
 				);
 				$response->sendPartial();
 			} catch (\Exception $e) {
-				$this->logger->log('Pull failed!', $e->getMessage());
 				$response->setContent(
 					[
 						'scriptFailed' => 'pull',
@@ -134,7 +122,6 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
-				$this->logger->log('Checkout succeeded!');
 			} catch (Exception $e) {
 				$response->setContent(
 					[
@@ -143,16 +130,13 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
-				$this->logger->log('Pull failed!', $e->getMessage());
 				return false;
 			}
 		}
 
 		// Executing scripts after checkout
 		foreach ($scriptsAfterPull as $script) {
-			$this->logger->log('Script to execute', $script);
 			$targetPath = empty($script['targetPath']) ? $this->path : $script['targetPath'];
-			$this->logger->log('Target path', $targetPath);
 			try {
 				CommandService::runCommandAsUserInFolder($script['command'], $targetPath);
 				$response->setContent(
@@ -161,7 +145,6 @@ class Project extends BaseModel {
 					]
 				);
 				$response->sendPartial();
-				$this->logger->log('Script successfully executed');
 			} catch (Exception $e) {
 				$response->setContent(
 					[
@@ -171,7 +154,6 @@ class Project extends BaseModel {
 				);
 				$response->sendPartial();
 
-				$this->logger->log('Script failed', $e->getMessage());
 				return false;
 			}
 		}
@@ -197,7 +179,6 @@ class Project extends BaseModel {
 	{
 		CommandService::runCommandsAsUserInFolder(['git fetch', 'git fetch origin'], $this->path);
 		$branchesOutput = CommandService::runCommandAsUserInFolder('git branch -r', $this->path);
-		$this->logger->info('Branchlist', $branchesOutput);
 		return array_map(
 			fn ($branch) =>
 				trim(

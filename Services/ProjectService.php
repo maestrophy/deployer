@@ -46,7 +46,6 @@ class ProjectService {
 
 	public function getRawAllProjects(): string {
 		$storageFile = $this->getProjectsStoragePath();
-		self::$logger->info('Storage file path', $storageFile);
 		if (!is_file($storageFile)) {
 			return '[]';
 		}
@@ -104,15 +103,12 @@ class ProjectService {
 
 	public static function validateProjectData(array &$projectData): bool
 	{
-		self::$logger->info('Project data', $projectData);
 		if (empty($projectData['projectPath'])) {
 			throw new \Exception('Project path is not defined!', 100002);
 		}
 
 		$projectData['projectPath'] = PathUtil::makeFullPathFromRelative($projectData['projectPath']);
-		self::$logger->info('Project path', $projectData['projectPath']);
 		exec("git -C " . escapeshellarg($projectData['projectPath']) . " rev-parse --is-inside-work-tree 2>/dev/null", $output, $isGitRepo);
-		self::$logger->info('Project path', $projectData['projectPath']);
 
 		if (
 			empty($projectData['projectName']) ||
@@ -120,16 +116,16 @@ class ProjectService {
 			self::$logger->warning('Tried project name', $projectData['projectName']);
 			throw new \Exception('Project name is not valid! Please use only letters, numbers and \'-\', \'_\', \'.\' characters', 100001);
 		}
-		self::$logger->info('Project path', $projectData['projectPath']);
 
 		if (!is_dir($projectData['projectPath'])) {
 			throw new \Exception('The given path is not valid, it does not exist on the server!', 100002);
 		}
-		self::$logger->info('Project path', $projectData['projectPath']);
+
 		if (!is_dir($projectData['projectPath'] . '.git') || $isGitRepo === 0) {
 			self::$logger->warning('The given path is not containing any .git directory!', $projectData['projectPath']);
 			throw new \Exception('The given path is not a valid git repository!', 100002);
 		}
+
 		if (!isset($projectData['scripts'])) {
 			$projectData['scripts'] = [];
 		} else if (!is_array($projectData['scripts'])) {
