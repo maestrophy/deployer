@@ -95,6 +95,8 @@ class ProjectHandler extends AbstractHandler {
 	 */
 	public function changeScript(string $projectName)
 	{
+		$logger = new Logger('', __class__);
+		$logger->setLogLevel();
 		/**
 		 * @var ProjectService
 		 */
