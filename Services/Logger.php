@@ -23,6 +23,8 @@ class Logger {
 
 	private int $logLevel = 0;
 
+	private $step = 1;
+
 	private $dateDependingLogLevels = [];
 
 	private $logLevelMapping = [
@@ -340,6 +342,25 @@ class Logger {
 				$description,
 				$value
 			);
+		}
+	}
+
+	public function logStep(int $messageLevel = 10): void
+	{
+		$backtrace = debug_backtrace();
+		$source = $backtrace[0];
+		$description = 'Step ' . $this->step . ' executed from ' . end(explode('/', $source['file'])) . ' line ' . $source['line'];
+		if ($this->isLogging($messageLevel)) {
+			self::addLog(
+				$this->logPath,
+				$this->logFileName,
+				'Custom',
+				$this->separateLoggingLengthLimit,
+				$this->typeLogging,
+				$this->logSubject,
+				$description
+			);
+			$this->step++;
 		}
 	}
 }
