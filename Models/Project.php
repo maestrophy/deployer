@@ -13,6 +13,8 @@ class Project extends BaseModel {
 	private string $name;
 	private string $path;
 	private array $scripts;
+	private array $branches;
+	private string $activeBranch;
 	private Logger $logger;
 
 	function __construct(array $data)
